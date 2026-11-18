@@ -1,4 +1,5 @@
-/* global chrome */
+/* global chrome, domainFromUrl */
+importScripts("vendor/tldts-7.5.4.min.js", "domain.js");
 
 const STORAGE_KEY = "tabZooStateV1";
 const SPECIES_KEY = "tabZooSpeciesMapV1";
@@ -19,18 +20,9 @@ function enqueue(task) {
   return taskQueue;
 }
 
-function domainFromUrl(url) {
-  try {
-    const parsed = new URL(url);
-    if (!["http:", "https:"].includes(parsed.protocol)) return null;
-    return parsed.hostname.replace(/^www\./, "").toLowerCase();
-  } catch {
-    return null;
-  }
-}
-
 function emptyState() {
   return {
+    domainGroupingVersion: 1,
     records: {},
     seenTabs: {},
     registeredTabs: {},
@@ -46,7 +38,7 @@ function emptyState() {
 async function readState() {
   const stored = await chrome.storage.local.get([STORAGE_KEY, SPECIES_KEY]);
   const state = stored[STORAGE_KEY] ?? emptyState();
-  state.records ??= {};
+  state.records = Object.assign(Object.create(null), state.records ?? {});
   state.seenTabs ??= {};
   state.registeredTabs ??= {};
   state.activationGate ??= false;
@@ -56,17 +48,53 @@ async function readState() {
     state.speciesStateVersion = SPECIES_STATE_VERSION;
   }
   state.speciesGeneration ??= 0;
-  state.speciesMap ??= {};
+  state.speciesMap = Object.assign(Object.create(null), state.speciesMap ?? {});
   delete state.resetTabAccess;
   delete state.suppressedTabs;
   state.session ??= null;
   if (state.session && !Number.isFinite(state.session.lastHeartbeatAt)) {
     state.session.lastHeartbeatAt = state.session.startedAt;
   }
+  if (state.domainGroupingVersion !== 1) migrateDomains(state);
+  for (const record of Object.values(state.records)) {
+    delete record.url;
+    delete record.title;
+  }
   return state;
 }
 
+// Combine old hostname records once, preserving elapsed time and an existing animal.
+function migrateDomains(state) {
+  const key = (host) => domainFromUrl(`https://${host}/`) || host;
+  const records = Object.create(null);
+  for (const [host, record] of Object.entries(state.records)) {
+    const domain = key(host);
+    const merged = records[domain] ??= { totalMs: 0, sessionsMs: [], visits: [], lastSeen: 0 };
+    merged.totalMs += record.totalMs || 0;
+    merged.sessionsMs.push(...(record.sessionsMs || []));
+    merged.visits.push(...(record.visits || []));
+    merged.lastSeen = Math.max(merged.lastSeen, record.lastSeen || 0);
+  }
+  for (const record of Object.values(records)) {
+    record.sessionsMs = record.sessionsMs.slice(-MAX_SESSIONS);
+    record.visits = record.visits.sort((a, b) => a - b).slice(-MAX_VISITS);
+  }
+  const assigned = Object.create(null);
+  // Prefer the currently active animal, then the base domain, then a stable hostname order.
+  const active = state.session?.domain;
+  const hosts = Object.keys(state.speciesMap).sort((a, b) =>
+    Number(b === active) - Number(a === active) || Number(b === key(b)) - Number(a === key(a)) || a.localeCompare(b));
+  for (const host of hosts) assigned[key(host)] ??= state.speciesMap[host];
+  for (const tab of Object.keys(state.seenTabs)) state.seenTabs[tab] = key(state.seenTabs[tab]);
+  for (const registration of Object.values(state.registeredTabs)) registration.domain = key(registration.domain);
+  if (state.session) state.session.domain = key(state.session.domain);
+  state.records = records;
+  state.speciesMap = assigned;
+  state.domainGroupingVersion = 1;
+}
+
 function assignSpecies(state, domain) {
+  if (!Object.hasOwn(state.speciesMap, domain)) state.speciesMap[domain] = null;
   if (state.speciesMap[domain] === "owl") state.speciesMap[domain] = "duck";
   if (species.includes(state.speciesMap[domain])) return state.speciesMap[domain];
   const assigned = species[Math.floor(Math.random() * species.length)];
@@ -79,13 +107,11 @@ async function writeState(state) {
 }
 
 function ensureRecord(state, domain) {
-  state.records[domain] ??= {
+  if (!Object.hasOwn(state.records, domain)) state.records[domain] = {
     totalMs: 0,
     sessionsMs: [],
     visits: [],
     lastSeen: 0,
-    title: "",
-    url: "",
   };
   return state.records[domain];
 }
@@ -151,8 +177,6 @@ async function beginTab(tab, now = Date.now(), { countVisit = true, allowRegistr
     state.session.lastHeartbeatAt = now;
     state.seenTabs[tabKey] = domain;
     const record = ensureRecord(state, domain);
-    record.title = tab.title ?? record.title;
-    record.url = tab.url ?? record.url;
     record.lastSeen = now;
     await writeState(state);
     return state;
@@ -165,8 +189,6 @@ async function beginTab(tab, now = Date.now(), { countVisit = true, allowRegistr
   if (countVisit && (!record.visits.length || now - record.visits[record.visits.length - 1] > 3000)) {
     record.visits.push(now);
   }
-  record.title = tab.title ?? record.title;
-  record.url = tab.url ?? record.url;
   record.lastSeen = now;
   state.session = {
     tabId: tab.id,
@@ -242,6 +264,7 @@ async function resetTracking() {
   const now = Date.now();
   const previousState = await readState();
   const state = {
+    domainGroupingVersion: 1,
     records: {},
     seenTabs: {},
     registeredTabs: {},

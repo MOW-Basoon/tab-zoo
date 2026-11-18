@@ -1,0 +1,2 @@
+# Preserve the exact upstream bundled library bytes for checksum verification.
+extension/vendor/tldts-7.5.4.min.js -text
