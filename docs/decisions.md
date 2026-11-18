@@ -69,3 +69,11 @@ Important decisions belong here, not every small edit. Use GitHub handles, disti
 - Decision: the signature red T-rex faces right, and the icon should not have a white outline. Explore a subtle browser-tab or site-visit cue without losing the close-up character or small-size legibility.
 - Context: after comparing the existing animals and discussing store references, `mow-coding` chose the orientation and asked how the icon could communicate the extension's relationship to visited websites.
 - Evidence: `mow-coding`'s instruction in the collaboration conversation; the conversation itself is not public. This refines the preceding signature animal decision; the exact cue and final artwork remain undecided.
+
+## 2026-11-18 — Explore browser-window cue
+
+- Status: design direction for a draft, not final artwork approval.
+- Proposer: `mow-coding` (human); `dongseok2001-creator`'s input on this draft has not been recorded.
+- Direction: try a white browser-window frame and coloured window controls in its upper-right corner so the motif reads as a browser rather than a folder. Retain the red, right-facing T-rex and dark green background. This refines the earlier no-white-outline instruction for the browser frame; do not assume a white outline around the animal was requested.
+- Rationale: the earlier green browser-tab motif looked like a folder and did not sufficiently convey the browser context. Exact pixel layout, legibility at small sizes, and adoption remain open.
+- Evidence: `mow-coding`'s instruction in the collaboration conversation; the conversation itself is not public.
