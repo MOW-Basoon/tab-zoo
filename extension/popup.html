@@ -64,7 +64,12 @@
         </div>
       </section>
 
-      <footer><span>데이터는 이 브라우저에만 저장됩니다</span><b id="app-version">POPUP</b></footer>
+      <footer><button id="open-collection" type="button">화석 컬렉션</button><b id="app-version">POPUP</b></footer>
+      <section id="fossil-collection" class="fossil-collection" aria-label="화석 컬렉션" hidden>
+        <header><b>화석 컬렉션</b><button id="close-collection" type="button" aria-label="컬렉션 닫기">×</button></header>
+        <p>떠난 동물이 이 브라우저에 남아요.</p>
+        <div id="fossil-list"></div>
+      </section>
     </main>
     <script src="vendor/tldts-7.5.4.min.js"></script>
     <script src="domain.js"></script>

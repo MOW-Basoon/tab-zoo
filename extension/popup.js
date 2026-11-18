@@ -97,6 +97,10 @@ const elements = {
   domain: document.querySelector("#observed-domain"),
   summary: document.querySelector("#observed-summary"),
   version: document.querySelector("#app-version"),
+  collection: document.querySelector("#fossil-collection"),
+  fossilList: document.querySelector("#fossil-list"),
+  openCollection: document.querySelector("#open-collection"),
+  closeCollection: document.querySelector("#close-collection"),
 };
 
 let renderedModels = [];
@@ -581,6 +585,39 @@ elements.toggleEggs.addEventListener("click", async () => {
   await chrome.storage.local.set({ [HIDE_EGGS_KEY]: eggsHidden });
 });
 
+async function showCollection() {
+  const snapshot = await getSnapshot();
+  elements.fossilList.replaceChildren();
+  const fossils = snapshot.state.fossils ?? [];
+  if (!fossils.length) {
+    const empty = document.createElement("p");
+    empty.textContent = "아직 남겨진 화석이 없어요.";
+    elements.fossilList.append(empty);
+  }
+  for (const fossil of [...fossils].reverse()) {
+    const row = document.createElement("div");
+    row.className = "fossil-row";
+    const info = document.createElement("span");
+    const date = new Date(fossil.departedAt).toLocaleDateString();
+    info.textContent = `🦴 ${fossil.domain} · ${speciesNames[fossil.species] ?? fossil.species} · ${date}`;
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.textContent = "삭제";
+    remove.setAttribute("aria-label", `${fossil.domain} 화석 삭제`);
+    remove.addEventListener("click", async () => {
+      if (!window.confirm(`${fossil.domain} 화석을 삭제할까요?`)) return;
+      const result = await chrome.runtime.sendMessage({ type: "deleteFossil", id: fossil.id });
+      if (result?.ok) await showCollection();
+    });
+    row.append(info, remove);
+    elements.fossilList.append(row);
+  }
+  elements.collection.hidden = false;
+}
+
+elements.openCollection.addEventListener("click", () => showCollection().catch(console.error));
+elements.closeCollection.addEventListener("click", () => { elements.collection.hidden = true; });
+
 function showClearedZoo() {
   renderedModels = [];
   elements.creatures.replaceChildren();
@@ -596,7 +633,7 @@ function showClearedZoo() {
 }
 
 elements.reset.addEventListener("click", async () => {
-  const approved = window.confirm("모든 동물과 사이트별 동물 배정, 성장·체류·왕복 기록을 삭제할까요? 현재 맵과 사이트 색은 유지됩니다.");
+  const approved = window.confirm("현재 동물과 성장 기록을 삭제할까요? 화석 컬렉션, 맵과 사이트 색은 유지됩니다.");
   if (!approved) return;
   elements.reset.disabled = true;
   try {

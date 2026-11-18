@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Tab Zoo",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "열린 탭의 사용 습관을 작은 도트 생물로 보여주는 로컬 탭 서식지",
   "minimum_chrome_version": "121",
   "permissions": [
