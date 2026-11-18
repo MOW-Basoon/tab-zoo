@@ -1,18 +1,22 @@
 # Decision history
 
-Important decisions belong here, not every small edit. Use GitHub handles, distinguish AI proposals from human decisions, cite evidence when available, and never include private data. Add a new entry when a decision changes; do not erase its history.
+공개 기록에서는 원작자를 **DS**, 협업자를 **basoon**으로 표기한다. 괄호 안의 human은 본인, Claude와 Codex는 그 사람과 작업한 AI를 뜻한다. 날짜는 기록일이다. 제안·결정·승인·구현의 근거가 없으면 `unknown`, 아직 진행 전이면 `pending`으로 적는다.
 
-## Original project and decision credit
+## 2026-11-18 — 원작의 핵심 아이디어와 초기 버전
 
-Tab Zoo was created by `dongseok2001-creator`. Before the collaboration, the project already turned sites into seven species of pixel animals, coloured them from favicons, grew them with foreground time, put them to sleep after inactivity, and removed them when their site's last tab closed. The red T-rex and the three habitats were already part of the original project. See the [README before the first collaborative PR](https://github.com/dongseok2001-creator/tab-zoo/blob/7de031a/README.md).
+열어 둔 사이트를 픽셀 동물로 보여 주는 동물원은 **DS 본인이 제안하고 결정한 핵심 아이디어**다. 초기 버전(0.1.10까지)의 구현은 **DS의 Claude가 대부분 맡았다**고 basoon이 설명했다. 최초 결정 날짜는 미상이다.
 
-**Attribution correction, 2026-11-18.** At `mow-coding`'s request, credit project decisions to `dongseok2001-creator` by default. Credit a decision to `mow-coding` only when they explicitly claim or confirm it as their own. This corrects earlier entries that treated requests for work as personal decisions. The default assigns project credit; personal approval by the owner or authorship by the owner's Claude requires separate evidence. The entries below preserve known proposals and implementation contributions.
+- Proposed by: DS (human)
+- Decided by: DS (human)
+- Approved by: unknown
+- Implemented by: DS (Claude)
+- Basis: basoon의 소급 설명이 사람과 AI의 역할에 대한 근거다. [협업 전 README][original-readme]에서 그 아이디어가 구현된 버전을 확인할 수 있다. 구현자 표시는 초기 작업 전체에 대한 설명이다.
 
-## 원작자 dongseok2001-creator의 제품 결정
+### 0.1.10에서 확인되는 세부 동작
 
-아래는 협업을 시작하기 전 0.1.10에 이미 구현된 결정이다. 2026-11-18에 당시 버전을 대조해 소급 기록했다. 각 결정의 귀속은 원작자 `dongseok2001-creator`이며, 최초 결정 날짜와 항목별 AI 참여 여부는 확인되지 않았다.
+첫 행은 위 핵심 아이디어다. 나머지 행의 근거는 당시 동작을 확인할 수 있는 코드·문서다. 세부 규칙 하나하나를 누가 제안·결정·승인·구현했는지는 미상이다. 예를 들어 성장 시간을 1분과 5분으로 정한 사람이나 도구까지 특정할 자료는 없다.
 
-| 원작자가 정한 것 | 원래 동작과 사용자에게 보이는 의미 | 당시 근거 |
+| 원본에서 확인한 기능 | 원래 동작과 사용자에게 보이는 의미 | 당시 근거 |
 | --- | --- | --- |
 | 열린 사이트를 픽셀 동물원으로 표현 | 브라우저 팝업을 열면 현재 열어 둔 사이트가 동물로 나타난다. | [원본 소개][original-readme] |
 | 같은 사이트에는 한 마리 배정 | 같은 호스트의 탭을 여러 개 열어도 한 마리를 보여준다. 당시에는 호스트명에서 앞의 `www.`를 제거했다. [협업 후 서브도메인 묶음 기준 변경](#2026-11-18--group-related-subdomains). | [사이트 식별 코드][original-bg] |
@@ -35,81 +39,179 @@ Tab Zoo was created by `dongseok2001-creator`. Before the collaboration, the pro
 
 ## 2026-11-18 — Shared decision history
 
+- Proposed by: basoon (human)
+- Decided by: basoon (human)
+- Approved by: basoon (human)
+- Implemented by: basoon (Codex)
+- Basis: basoon requested repository-level attribution. See [PR #1](https://github.com/dongseok2001-creator/tab-zoo/pull/1) for the initial workflow.
+
+
 - Status: decided.
-- Project decision credit: `dongseok2001-creator` (default). Workflow requested by `mow-coding`.
 - Context: people and their AI assistants collaborate on the same public repository. Commit authorship alone does not explain why a choice was made or who made it.
-- Decision: use repository instructions shared by Codex and Claude, and record significant decisions with attribution and rationale. Do not change GitHub settings to enforce this workflow. Keep real names and private information out of public records.
-- Evidence: instructions from `mow-coding` in the collaboration planning conversation; the conversation itself is not public.
+- Decision: use repository instructions shared by Codex and Claude, and record significant decisions with attribution and rationale. Run attribution checks with the repository's existing test workflow. Keep real names and private information out of public records.
+- Evidence: instructions from basoon in the collaboration planning conversation; the conversation itself is not public.
 
 ## 2026-11-18 — Group related subdomains
 
-- Status: decided for product behavior; implementation selected and pending release verification.
-- Proposer: `mow-coding` (human) raised the issue; `mow-coding`'s Codex proposed registrable-domain grouping and evaluating `tldts` with private suffixes enabled.
-- Project decision credit: `dongseok2001-creator` (default). `mow-coding` asked to keep Gmail and Drive together for now.
+- Proposed by: basoon (Codex)
+- Decided by: basoon (Codex)
+- Approved by: basoon (human)
+- Implemented by: basoon (Codex)
+- Basis: basoon raised the grouping issue, accepted grouping and explicitly chose to keep Gmail and Drive together. basoon's Codex chose the bundled library and private-suffix setting in [PR #1](https://github.com/dongseok2001-creator/tab-zoo/pull/1).
+
+
+- Status: decided for product behavior; implemented in PR #1.
+- Proposer: basoon (human) raised the issue; basoon's Codex proposed registrable-domain grouping and evaluating `tldts` with private suffixes enabled.
 - Decision: group subdomains by registrable domain by default. For now Gmail and Google Drive may be grouped together. Separate independently hosted sites such as different `github.io` users using the private section of the Public Suffix List.
 - Rationale: `uos.ac.kr` and `portal.uos.ac.kr` feel like one site. A maintained public suffix list avoids a manually maintained list of websites, while recognizing shared hosting boundaries. This is a practical heuristic, not proof of common ownership.
 - Evidence: collaboration planning conversation; [Public Suffix List](https://publicsuffix.org/); [tldts documentation](https://github.com/remusao/tldts).
-- Implementation: `mow-coding`'s Codex selected bundled `tldts` 7.5.4 with private suffixes enabled. It is an implementation choice under the approved behavior, not a claim that the owner personally chose this library. Update the bundled version and license together when the list is refreshed.
+- Implementation: basoon's Codex selected bundled `tldts` 7.5.4 with private suffixes enabled. It is an implementation choice under the approved behavior, not a claim that the owner personally chose this library. Update the bundled version and license together when the list is refreshed.
+
+## 2026-11-18 — Keep Gmail and Drive together
+
+- Proposed by: basoon (human)
+- Decided by: basoon (human)
+- Approved by: basoon (human)
+- Implemented by: basoon (Codex)
+- Basis: basoon explicitly chose to defer service-specific exceptions. [PR #1](https://github.com/dongseok2001-creator/tab-zoo/pull/1) implemented the shared grouping rule.
+
+Gmail and Drive share one animal for now. The product can use the normal site grouping rule without maintaining a special list for individual Google services.
 
 ## 2026-11-18 — Explore AI agent browsing in Tab Zoo
 
+- Proposed by: basoon (human)
+- Decided by: pending
+- Approved by: pending
+- Implemented by: pending
+- Basis: basoon explicitly identified the idea as their own. This entry records the initial proposal. See the later Aside entry for the tested implementation.
+
+
 - Status: proposal; product design and feasibility not yet decided.
-- Project decision credit: `dongseok2001-creator` (default).
-- Proposer: `mow-coding` (human), who reports having discussed the idea previously with `dongseok2001-creator`.
+- Proposer: basoon (human), who reports having discussed the idea previously with DS.
 - Idea: people are not the only browser users; exploring where AI agents browse could be an interesting use for Tab Zoo. Consider supporting Chrome, Edge, and Aside.
-- Context: the current extension is built around open tabs and focused activity. Whether it can observe an agent's tabs, distinguish them from a person's tabs, or retain activity after tabs close depends on the browser, profile, APIs, and agent. None of those capabilities is confirmed here.
+- Context: the current extension is built around open tabs and focused activity. Whether it can observe an agent's tabs, distinguish them from a person's tabs, or retain activity after tabs close depends on the browser, profile, APIs, and agent. See the later Aside entry for the observed behavior.
 - Before implementing: investigate browser support and privacy, agree what activity should be shown and for how long, and obtain product direction for any UI changes. Do not assume access to other profiles, separate agent browsers, or private task details.
-- Evidence: `mow-coding`'s description in the collaboration conversation; details of the earlier discussion have not been independently established.
+- Evidence: basoon's description in the collaboration conversation; details of the earlier discussion have not been independently established.
 
 ## 2026-11-18 — Fossils, collection, and useful signals
 
+- Proposed by: basoon (human)
+- Decided by: basoon (human)
+- Approved by: basoon (human)
+- Implemented by: basoon (Codex)
+- Basis: basoon proposed fossils and the collection and requested implementation. basoon reports DS supported the collection idea. Retention and data fields were implementation choices by basoon's Codex in [PR #2](https://github.com/dongseok2001-creator/tab-zoo/pull/2).
+
+
 - Status: product direction decided; individual designs and AI identification remain under investigation.
-- Project decision credit: `dongseok2001-creator` (default).
-- Proposer: `mow-coding` (human). `mow-coding` reports that `dongseok2001-creator` liked the collection idea; the friend's exact wording has not been independently recorded.
+- Proposer: basoon (human). basoon reports that DS liked the collection idea; this is a secondhand account.
 - Decision: explore a practical, approachable view of browser activity as well as playful visuals. When an animal leaves, preserve it as a fossil in a collection rather than losing it forever. AI activity needs an event-based approach distinct from human foreground dwell time.
 - Rationale: a person may want to see sites an agent visited in the background or quickly closed while they were away. The proposer also suggested unusual creatures as a possible way to communicate suspicious sites.
 - Safety constraint: unknown or unusual is not evidence that a site is dangerous. No risk verdict or alarming warning should be presented without a reliable source and a clearly explained basis; privacy, reliability, and applicable service terms must be reviewed first.
-- Implementation choice by `mow-coding`'s Codex: keep the fossil collection locally until the user deletes entries, recording the site domain, animal, duration, and departure time but not full URLs or titles. Current-zoo reset preserves the collection. Agent attribution is not assumed from a background tab alone.
-- Evidence: `mow-coding`'s instructions in the collaboration conversation.
+- Implementation choice by basoon's Codex: keep the fossil collection locally until the user deletes entries, recording the site domain, animal, duration, and departure time but not full URLs or titles. Current-zoo reset preserves the collection. Agent attribution is not assumed from a background tab alone.
+- Evidence: basoon's instructions in the collaboration conversation.
 
 ## 2026-11-18 — Observe Aside Agent Tabs visits
 
+- Proposed by: basoon (human)
+- Decided by: basoon (Codex)
+- Approved by: basoon (human)
+- Implemented by: basoon (Codex)
+- Basis: basoon requested observable agent visits. basoon's Codex chose and tested the tab-group heuristic in [PR #3](https://github.com/dongseok2001-creator/tab-zoo/pull/3). The human approval covers the feature direction.
+
+
 - Status: implemented for the observed Aside tab-group behavior, subject to browser compatibility limits.
-- Project decision credit: `dongseok2001-creator` (default). `mow-coding` proposed and requested the feature. `mow-coding`'s Codex selected the group-name implementation.
 - An isolated Aside test showed an agent-opened test tab in a Chrome tab group titled `Agent Tabs` and a separately opened ordinary tab outside that group. Observe that group, count domain arrivals separately from human foreground time, and keep them in the local fossil collection until deletion.
 - This is a group-name heuristic, not proof of AI authorship: a user can rename or create such a group, behavior can change, other profiles and non-tab network requests are not visible, and very short visits may be missed before group assignment. Never report these limits as universal AI monitoring.
 - Store only the registrable domain, count, animal and timestamp; update the privacy notice. The added `tabGroups` permission may require user acceptance during an extension update.
 
 ## 2026-11-18 — Signature animal and colour
 
+- Proposed by: basoon (human)
+- Decided by: basoon (human)
+- Approved by: basoon (human)
+- Implemented by: pending
+- Basis: basoon explicitly chose the existing red T-rex and dark green background. See the final icon entry for artwork delivery.
+
+
 - Status: decided for the proposed brand identity; artwork and release implementation are pending.
-- Proposer and decision maker: `mow-coding` (human).
+- Proposer and decision maker: basoon (human).
 - Decision: use Tab Zoo's existing red T-rex as the signature animal, against a dark green background. Explore a close-up pixel-art face for the extension icon, keeping the existing character recognisable.
 - Context: the current extension includes seven species and a typography-based icon. The idea is to give the project an identifiable character grounded in its existing artwork.
 - Still open: the exact artwork, left/right/front-facing direction, icon dimensions and final adoption in the extension. Review comparable store icons and small-size legibility before choosing a direction. Do not represent a draft as an approved final icon.
-- Evidence: `mow-coding`'s instruction in the collaboration conversation; the conversation itself is not public.
+- Evidence: basoon's instruction in the collaboration conversation; the conversation itself is not public.
 
 ## 2026-11-18 — Signature icon orientation
 
+- Proposed by: basoon (human)
+- Decided by: basoon (human)
+- Approved by: basoon (human)
+- Implemented by: pending
+- Basis: basoon chose a right-facing animal during the design review.
+
+
 - Status: decided for the icon direction; final artwork and release implementation remain pending.
-- Proposer and decision maker: `mow-coding` (human).
+- Proposer and decision maker: basoon (human).
 - Decision: the signature red T-rex faces right, and the icon should not have a white outline. Explore a subtle browser-tab or site-visit cue without losing the close-up character or small-size legibility.
-- Context: after comparing the existing animals and discussing store references, `mow-coding` chose the orientation and asked how the icon could communicate the extension's relationship to visited websites.
-- Evidence: `mow-coding`'s instruction in the collaboration conversation; the conversation itself is not public. This refines the preceding signature animal decision; the exact cue and final artwork remain undecided.
+- Context: after comparing the existing animals and discussing store references, basoon chose the orientation and asked how the icon could communicate the extension's relationship to visited websites.
+- Evidence: basoon's instruction in the collaboration conversation; the conversation itself is not public. This refines the preceding signature animal decision; the exact cue and final artwork remain undecided.
 
 ## 2026-11-18 — Explore browser-window cue
 
+- Proposed by: basoon (human)
+- Decided by: basoon (human)
+- Approved by: basoon (human)
+- Implemented by: basoon (Codex)
+- Basis: basoon requested the white window frame and coloured controls for the draft. Final icon approval is recorded separately.
+
+
 - Status: design direction for a draft, not final artwork approval.
-- Proposer: `mow-coding` (human).
+- Proposer: basoon (human).
 - Direction: try a white browser-window frame and coloured window controls in its upper-right corner so the motif reads as a browser rather than a folder. Retain the red, right-facing T-rex and dark green background. This refines the earlier no-white-outline instruction for the browser frame; do not assume a white outline around the animal was requested.
 - Rationale: the earlier green browser-tab motif looked like a folder and did not sufficiently convey the browser context. Exact pixel layout, legibility at small sizes, and adoption remain open.
-- Evidence: `mow-coding`'s instruction in the collaboration conversation; the conversation itself is not public.
+- Evidence: basoon's instruction in the collaboration conversation; the conversation itself is not public.
 
 ## 2026-11-18 — Approve T-rex browser icon
 
-- Status: approved by `mow-coding`; implementation and release checks are tracked separately. This supersedes the open artwork and frame questions in the preceding entries.
-- Proposer and producer: `mow-coding`'s Codex generated a draft with an image-generation tool using the existing animal atlas as a reference. Decision maker: `mow-coding` (human), who reviewed and approved that draft for the project and browser-extension icon.
+- Proposed by: basoon (Codex)
+- Decided by: basoon (human)
+- Approved by: basoon (human)
+- Implemented by: basoon (Codex)
+- Basis: basoon explicitly approved the artwork produced by basoon's Codex. [PR #5](https://github.com/dongseok2001-creator/tab-zoo/pull/5) applied it.
+
+
+- Status: approved by basoon; implementation and release checks are tracked separately. This supersedes the open artwork and frame questions in the preceding entries.
+- Proposer and producer: basoon's Codex generated a draft with an image-generation tool using the existing animal atlas as a reference. Decision maker: basoon (human), who reviewed and approved that draft for the project and browser-extension icon.
 - Decision: use the approved close-up, right-facing red T-rex on a dark green background inside a white browser-window frame with three coloured controls at the upper right. The white frame refines the earlier instruction against a white outline; it is a browser frame, not an outline around the animal.
 - Context: the project needed a recognisable mascot and a visual cue that it is a browser extension. Earlier tab-like shapes resembled folders. The approved image is a new AI-generated interpretation of the existing animal rather than a pixel-identical crop.
 - Source artwork: `extension/assets/tab-zoo-trex-browser-source.png`. `scripts/build-icons.ps1` produces the installed icon sizes, with the Chrome store icon's transparent inset.
-- Evidence: `mow-coding`'s explicit approval in the collaboration conversation; the conversation itself is not public.
+- Evidence: basoon's explicit approval in the collaboration conversation; the conversation itself is not public.
+
+## 2026-11-18 — Minimise stored browsing data
+
+- Proposed by: basoon (human)
+- Decided by: basoon (Codex)
+- Approved by: unknown
+- Implemented by: basoon (Codex)
+- Basis: basoon requested a security review. The [review](security-review.md) identifies the reviewer and [PR #1](https://github.com/dongseok2001-creator/tab-zoo/pull/1) shows the resulting storage change.
+
+The original background worker retained full URLs and titles. The review found the popup only needed the site, so the worker stopped saving those fields and removes legacy values when it saves the state.
+
+## 2026-11-18 — Prepare Chrome and Edge listings
+
+- Proposed by: basoon (human)
+- Decided by: basoon (human)
+- Approved by: basoon (human)
+- Implemented by: basoon (Codex)
+- Basis: basoon requested preparation for both stores. [PR #4](https://github.com/dongseok2001-creator/tab-zoo/pull/4) and [PR #6](https://github.com/dongseok2001-creator/tab-zoo/pull/6) document the drafts and reviewer materials.
+
+Prepare listing copy, permission explanations and visual assets so reviewers can reproduce the main features. Store submission and its approvals are separate steps.
+
+## 2026-11-18 — Correct attribution and adopt public aliases
+
+- Proposed by: basoon (human)
+- Decided by: basoon (human)
+- Approved by: basoon (human)
+- Implemented by: basoon (Codex)
+- Basis: basoon clarified the original roles, chose the aliases, and requested this repository-wide correction. [PR #7](https://github.com/dongseok2001-creator/tab-zoo/pull/7) and [PR #8](https://github.com/dongseok2001-creator/tab-zoo/pull/8) preserve the earlier retrospective.
+
+The earlier log gave DS default decision credit for unattributed choices. This correction replaces that rule. Record the specific actor and the evidence for each role. basoon's account credits DS with the core idea and DS's Claude with most early implementation. Individual decisions can be updated as more evidence becomes available.

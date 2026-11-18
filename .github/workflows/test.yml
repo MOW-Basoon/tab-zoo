@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+    types: [opened, synchronize, reopened, edited]
 
 jobs:
   extension:
@@ -14,3 +15,5 @@ jobs:
         with:
           node-version: 22
       - run: npm test
+      - if: github.event_name == 'pull_request'
+        run: node scripts/check-pr-decision.mjs
