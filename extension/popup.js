@@ -599,7 +599,8 @@ async function showCollection() {
     row.className = "fossil-row";
     const info = document.createElement("span");
     const date = new Date(fossil.departedAt).toLocaleDateString();
-    info.textContent = `🦴 ${fossil.domain} · ${speciesNames[fossil.species] ?? fossil.species} · ${date}`;
+    const source = fossil.source === "agent-group" ? ` · Agent Tabs ${fossil.visits}회` : "";
+    info.textContent = `🦴 ${fossil.domain} · ${speciesNames[fossil.species] ?? fossil.species}${source} · ${date}`;
     const remove = document.createElement("button");
     remove.type = "button";
     remove.textContent = "삭제";

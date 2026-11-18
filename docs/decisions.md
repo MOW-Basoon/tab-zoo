@@ -44,3 +44,11 @@ Important decisions belong here, not every small edit. Use GitHub handles, disti
 - Safety constraint: unknown or unusual is not evidence that a site is dangerous. No risk verdict or alarming warning should be presented without a reliable source and a clearly explained basis; privacy, reliability, and applicable service terms must be reviewed first.
 - Implementation choice by `mow-coding`'s Codex: keep the fossil collection locally until the user deletes entries, recording the site domain, animal, duration, and departure time but not full URLs or titles. Current-zoo reset preserves the collection. Agent attribution is not assumed from a background tab alone.
 - Evidence: `mow-coding`'s instructions in the collaboration conversation.
+
+## 2026-11-18 — Observe Aside Agent Tabs visits
+
+- Status: implemented for the observed Aside tab-group behavior, subject to browser compatibility limits.
+- Proposer and decision maker: `mow-coding` (human) requested a working view of sites visited by an AI while the person is away; implementation selected by `mow-coding`'s Codex.
+- An isolated Aside test showed an agent-opened test tab in a Chrome tab group titled `Agent Tabs` and a separately opened ordinary tab outside that group. Observe that group, count domain arrivals separately from human foreground time, and keep them in the local fossil collection until deletion.
+- This is a group-name heuristic, not proof of AI authorship: a user can rename or create such a group, behavior can change, other profiles and non-tab network requests are not visible, and very short visits may be missed before group assignment. Never report these limits as universal AI monitoring.
+- Store only the registrable domain, count, animal and timestamp; update the privacy notice. The added `tabGroups` permission may require user acceptance during an extension update.

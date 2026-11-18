@@ -13,6 +13,7 @@ Tab Zoo(이하 "확장 프로그램")는 열린 탭의 사용 습관을 작은 �
 - 사이트별로 배정된 동물 종, 파비콘에서 추출한 대표 색, 동물의 화면 위치
 - 맵 선택, 알 숨기기 같은 화면 설정
 - 화석 컬렉션의 사이트 도메인, 동물 종류, 체류 시간과 떠난 시각
+- `Agent Tabs` 탭 그룹에서 열린 사이트의 도메인, 방문 횟수와 최근 방문 시각. 전체 URL과 페이지 제목은 저장하지 않습니다.
 
 브라우저의 유휴 상태(입력 없음·화면 잠금)는 자리를 비운 시간을 체류 시간에서 빼는 데만 사용하며 따로 저장하지 않습니다.
 
@@ -52,6 +53,7 @@ To create and grow the animals, the extension stores the following **only inside
 - The animal species assigned to each site, a colour taken from its favicon, and its position on the map
 - Display preferences such as the selected map and whether eggs are hidden
 - Fossil collection entries: site domain, animal species, time spent, and departure time
+- Domain, visit count and most recent visit time for sites opened in a group named `Agent Tabs`; full URLs and page titles are not stored.
 
 The browser's idle state (no input or screen locked) is used only to exclude time away from the time spent, and is not stored.
 
