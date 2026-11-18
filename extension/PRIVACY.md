@@ -12,6 +12,7 @@ Tab Zoo(이하 "확장 프로그램")는 열린 탭의 사용 습관을 작은 �
 - 사이트별 체류 시간, 최근 방문 시각, 탭 전환 횟수
 - 사이트별로 배정된 동물 종, 파비콘에서 추출한 대표 색, 동물의 화면 위치
 - 맵 선택, 알 숨기기 같은 화면 설정
+- 화석 컬렉션의 사이트 도메인, 동물 종류, 체류 시간과 떠난 시각
 
 브라우저의 유휴 상태(입력 없음·화면 잠금)는 자리를 비운 시간을 체류 시간에서 빼는 데만 사용하며 따로 저장하지 않습니다.
 
@@ -23,9 +24,10 @@ Tab Zoo(이하 "확장 프로그램")는 열린 탭의 사용 습관을 작은 �
 
 ## 보관 기간과 삭제
 
-- 같은 등록 가능 도메인에 속하는 탭을 모두 닫으면 그 사이트의 동물과 사용 기록이 삭제됩니다.
-- 브라우저를 종료했다가 다시 실행하면 모든 동물과 사용 기록이 삭제됩니다.
-- 팝업의 초기화(↻) 버튼으로 동물과 사용 기록을 삭제할 수 있습니다. 맵 설정과 사이트별 색상은 유지됩니다.
+- 같은 등록 가능 도메인에 속하는 탭을 모두 닫으면 동물이 떠나고 화석이 컬렉션에 저장됩니다. 현재 체류 기록은 삭제됩니다.
+- 브라우저를 종료했다가 다시 실행하면 현재 동물원은 새로 시작하며 기존 동물의 화석이 남을 수 있습니다.
+- 팝업의 초기화(↻) 버튼은 현재 동물과 사용 기록을 지웁니다. 화석 컬렉션과 맵 설정, 사이트별 색상은 유지됩니다.
+- 화석은 사용자가 컬렉션에서 삭제하거나 확장 프로그램을 제거할 때까지 이 브라우저에 저장됩니다.
 - 사이트별 색상과 화면 위치 캐시는 사용 기록과 별도로 남을 수 있습니다. 확장 프로그램을 제거하면 함께 삭제됩니다.
 - 확장 프로그램을 제거하면 저장된 모든 정보가 함께 삭제됩니다.
 
@@ -49,6 +51,7 @@ To create and grow the animals, the extension stores the following **only inside
 - Time spent per site, recent visit times and tab switch counts
 - The animal species assigned to each site, a colour taken from its favicon, and its position on the map
 - Display preferences such as the selected map and whether eggs are hidden
+- Fossil collection entries: site domain, animal species, time spent, and departure time
 
 The browser's idle state (no input or screen locked) is used only to exclude time away from the time spent, and is not stored.
 
@@ -60,9 +63,10 @@ The browser's idle state (no input or screen locked) is used only to exclude tim
 
 ## Retention and deletion
 
-- Closing every tab for a registrable domain deletes that site's animal and usage record.
-- Restarting the browser deletes all animals and usage records.
-- The reset (↻) button deletes animals and usage records; map settings and site colours remain.
+- Closing every tab for a registrable domain archives the animal as a fossil and deletes its active usage record.
+- Restarting the browser starts a new zoo; fossils of prior animals may remain.
+- The reset (↻) button deletes current animals and usage records, while retaining the fossil collection, map settings and site colours.
+- Fossils remain in this browser until deleted from the collection or the extension is removed.
 - Site-colour and position caches may remain separately from usage records until the extension is removed.
 - Uninstalling the extension deletes all stored data.
 

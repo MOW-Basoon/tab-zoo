@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { webcrypto as crypto } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import vm from "node:vm";
@@ -48,13 +49,14 @@ async function loadBackground({ openTabs, state }) {
     },
     windows: {
       WINDOW_ID_NONE: -1,
+      async get() { return { focused: true }; },
       async getLastFocused() { return { id: -1, focused: false }; },
       onFocusChanged: eventSlot(),
     },
   };
 
   const source = await readFile(new URL("background.js", extensionRoot), "utf8");
-  const context = vm.createContext({ chrome, console, URL });
+  const context = vm.createContext({ chrome, console, URL, crypto });
   const vendor = await readFile(new URL("vendor/tldts-7.5.4.min.js", extensionRoot), "utf8");
   const domain = await readFile(new URL("domain.js", extensionRoot), "utf8");
   context.importScripts = () => {};
@@ -82,6 +84,7 @@ test("subdomains share an animal and the final close removes the combined record
   chrome.tabs.onRemoved.listener(2);
   await drain();
   assert.equal(data.tabZooStateV1.records["uos.ac.kr"], undefined);
+  assert.equal(data.tabZooStateV1.fossils.filter(f => f.domain === "uos.ac.kr").length, 1);
 });
 
 test("tracking does not persist a tab's full URL or title", async () => {
@@ -94,6 +97,16 @@ test("tracking does not persist a tab's full URL or title", async () => {
   assert.equal(record.url, undefined);
   assert.equal(record.title, undefined);
   assert.doesNotMatch(JSON.stringify(data.tabZooStateV1), /token=example|private title/);
+});
+
+test("navigating away from the final tab archives the departed animal", async () => {
+  const state = baseState();
+  const tab = { id: 1, windowId: 1, active: true, url: "https://new.example/" };
+  const { chrome, data, drain } = await loadBackground({ openTabs: [tab], state });
+  chrome.tabs.onUpdated.listener(1, { url: tab.url }, tab);
+  await drain();
+  assert.ok(data.tabZooStateV1.fossils.some(f => f.domain === "a.com"));
+  assert.ok(data.tabZooStateV1.records["new.example"]);
 });
 
 function baseState() {
@@ -122,6 +135,10 @@ test("closing the last tab of a site resets that site's animal", async () => {
 
   const state = data.tabZooStateV1;
   assert.equal(state.records["a.com"], undefined);
+  assert.equal(state.fossils.length, 1);
+  assert.equal(state.fossils[0].domain, "a.com");
+  assert.equal(state.fossils[0].species, "fox");
+  assert.equal(state.fossils[0].totalMs, 60000);
   assert.equal(state.speciesMap["a.com"], undefined);
   assert.equal(state.records["b.com"].totalMs, 120000);
   assert.equal(state.speciesMap["b.com"], "duck");
@@ -138,6 +155,7 @@ test("a site still open in another tab keeps its animal", async () => {
   await drain();
 
   assert.equal(data.tabZooStateV1.records["b.com"].totalMs, 120000);
+  assert.equal(data.tabZooStateV1.fossils.some(f => f.domain === "b.com"), false);
   assert.equal(data.tabZooStateV1.speciesMap["b.com"], "duck");
 });
 
@@ -165,6 +183,7 @@ test("restarting the browser starts a fresh zoo", async () => {
   const next = data.tabZooStateV1;
   assert.deepEqual(Object.keys(next.records), []);
   assert.deepEqual(Object.keys(next.speciesMap), []);
+  assert.equal(next.fossils.length, 2);
   assert.deepEqual(Object.keys(next.seenTabs), []);
   assert.equal(next.session, null);
   assert.equal(data.tabZooSpeciesMapV1, undefined);

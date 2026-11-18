@@ -23,6 +23,7 @@ function enqueue(task) {
 function emptyState() {
   return {
     domainGroupingVersion: 1,
+    fossils: [],
     records: {},
     seenTabs: {},
     registeredTabs: {},
@@ -39,6 +40,7 @@ async function readState() {
   const stored = await chrome.storage.local.get([STORAGE_KEY, SPECIES_KEY]);
   const state = stored[STORAGE_KEY] ?? emptyState();
   state.records = Object.assign(Object.create(null), state.records ?? {});
+  state.fossils ??= [];
   state.seenTabs ??= {};
   state.registeredTabs ??= {};
   state.activationGate ??= false;
@@ -220,9 +222,16 @@ async function endCurrentSession(now = Date.now()) {
   return state;
 }
 
-function forgetDomains(state, keepDomains) {
+function forgetDomains(state, keepDomains, now = Date.now()) {
   for (const domain of Object.keys(state.records)) {
-    if (!keepDomains.has(domain)) delete state.records[domain];
+    if (!keepDomains.has(domain)) {
+      const record = state.records[domain];
+      const animal = state.speciesMap[domain];
+      if (species.includes(animal)) {
+        state.fossils.push({ id: crypto.randomUUID(), domain, species: animal, totalMs: record.totalMs, departedAt: now });
+      }
+      delete state.records[domain];
+    }
   }
   for (const domain of Object.keys(state.speciesMap)) {
     if (!keepDomains.has(domain)) delete state.speciesMap[domain];
@@ -235,7 +244,7 @@ async function forgetClosedDomains(now = Date.now()) {
   expireStaleSession(state, now);
   const openTabs = await chrome.tabs.query({});
   const openDomains = new Set(openTabs.map((tab) => domainFromUrl(tab.url)).filter(Boolean));
-  forgetDomains(state, openDomains);
+  forgetDomains(state, openDomains, now);
   await writeState(state);
   return state;
 }
@@ -265,6 +274,7 @@ async function resetTracking() {
   const previousState = await readState();
   const state = {
     domainGroupingVersion: 1,
+    fossils: previousState.fossils,
     records: {},
     seenTabs: {},
     registeredTabs: {},
@@ -317,6 +327,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
       const window = await chrome.windows.get(tab.windowId);
       if (!window.focused) return;
       await beginTab(tab, Date.now());
+      await forgetClosedDomains();
     });
     return;
   }
@@ -372,12 +383,17 @@ chrome.alarms.onAlarm.addListener((alarm) => {
   enqueue(() => refreshFocusedTab({ countVisit: false }));
 });
 
-chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-  if (!["snapshot", "reset"].includes(message?.type)) return false;
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (sender.id !== chrome.runtime.id) return false;
+  if (!["snapshot", "reset", "deleteFossil"].includes(message?.type)) return false;
   enqueue(async () => {
-    const state = message.type === "reset"
-      ? await resetTracking()
-      : await refreshFocusedTab({ countVisit: false, allowRegistration: true });
+    let state;
+    if (message.type === "reset") state = await resetTracking();
+    else if (message.type === "deleteFossil") {
+      state = await readState();
+      state.fossils = state.fossils.filter(fossil => fossil.id !== message.id);
+      await writeState(state);
+    } else state = await refreshFocusedTab({ countVisit: false, allowRegistration: true });
     sendResponse({ ok: true, state, now: Date.now() });
   });
   return true;
