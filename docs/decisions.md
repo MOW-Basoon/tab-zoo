@@ -61,3 +61,11 @@ Important decisions belong here, not every small edit. Use GitHub handles, disti
 - Context: the current extension includes seven species and a typography-based icon. The idea is to give the project an identifiable character grounded in its existing artwork.
 - Still open: the exact artwork, left/right/front-facing direction, icon dimensions and final adoption in the extension. Review comparable store icons and small-size legibility before choosing a direction. Do not represent a draft as an approved final icon.
 - Evidence: `mow-coding`'s instruction in the collaboration conversation; the conversation itself is not public.
+
+## 2026-11-18 — Signature icon orientation
+
+- Status: decided for the icon direction; final artwork and release implementation remain pending.
+- Proposer and decision maker: `mow-coding` (human); `dongseok2001-creator`'s input on this specific choice has not been recorded.
+- Decision: the signature red T-rex faces right, and the icon should not have a white outline. Explore a subtle browser-tab or site-visit cue without losing the close-up character or small-size legibility.
+- Context: after comparing the existing animals and discussing store references, `mow-coding` chose the orientation and asked how the icon could communicate the extension's relationship to visited websites.
+- Evidence: `mow-coding`'s instruction in the collaboration conversation; the conversation itself is not public. This refines the preceding signature animal decision; the exact cue and final artwork remain undecided.
