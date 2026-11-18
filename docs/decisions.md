@@ -52,3 +52,12 @@ Important decisions belong here, not every small edit. Use GitHub handles, disti
 - An isolated Aside test showed an agent-opened test tab in a Chrome tab group titled `Agent Tabs` and a separately opened ordinary tab outside that group. Observe that group, count domain arrivals separately from human foreground time, and keep them in the local fossil collection until deletion.
 - This is a group-name heuristic, not proof of AI authorship: a user can rename or create such a group, behavior can change, other profiles and non-tab network requests are not visible, and very short visits may be missed before group assignment. Never report these limits as universal AI monitoring.
 - Store only the registrable domain, count, animal and timestamp; update the privacy notice. The added `tabGroups` permission may require user acceptance during an extension update.
+
+## 2026-11-18 — Signature animal and colour
+
+- Status: decided for the proposed brand identity; artwork and release implementation are pending.
+- Proposer and decision maker: `mow-coding` (human). Input from `dongseok2001-creator` on this specific decision has not been recorded.
+- Decision: use Tab Zoo's existing red T-rex as the signature animal, against a dark green background. Explore a close-up pixel-art face for the extension icon, keeping the existing character recognisable.
+- Context: the current extension includes seven species and a typography-based icon. The idea is to give the project an identifiable character grounded in its existing artwork.
+- Still open: the exact artwork, left/right/front-facing direction, icon dimensions and final adoption in the extension. Review comparable store icons and small-size legibility before choosing a direction. Do not represent a draft as an approved final icon.
+- Evidence: `mow-coding`'s instruction in the collaboration conversation; the conversation itself is not public.
