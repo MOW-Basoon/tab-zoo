@@ -77,3 +77,12 @@ Important decisions belong here, not every small edit. Use GitHub handles, disti
 - Direction: try a white browser-window frame and coloured window controls in its upper-right corner so the motif reads as a browser rather than a folder. Retain the red, right-facing T-rex and dark green background. This refines the earlier no-white-outline instruction for the browser frame; do not assume a white outline around the animal was requested.
 - Rationale: the earlier green browser-tab motif looked like a folder and did not sufficiently convey the browser context. Exact pixel layout, legibility at small sizes, and adoption remain open.
 - Evidence: `mow-coding`'s instruction in the collaboration conversation; the conversation itself is not public.
+
+## 2026-11-18 — Approve T-rex browser icon
+
+- Status: approved by `mow-coding`; implementation and release checks are tracked separately. This supersedes the open artwork and frame questions in the preceding entries.
+- Proposer and producer: `mow-coding`'s Codex generated a draft with an image-generation tool using the existing animal atlas as a reference. Decision maker: `mow-coding` (human), who reviewed and approved that draft for the project and browser-extension icon.
+- Decision: use the approved close-up, right-facing red T-rex on a dark green background inside a white browser-window frame with three coloured controls at the upper right. The white frame refines the earlier instruction against a white outline; it is a browser frame, not an outline around the animal.
+- Context: the project needed a recognisable mascot and a visual cue that it is a browser extension. Earlier tab-like shapes resembled folders. The approved image is a new AI-generated interpretation of the existing animal rather than a pixel-identical crop.
+- Source artwork: `extension/assets/tab-zoo-trex-browser-source.png`. `scripts/build-icons.ps1` produces the installed icon sizes, with the Chrome store icon's transparent inset. `dongseok2001-creator`'s input on this specific approval is not established.
+- Evidence: `mow-coding`'s explicit approval in the collaboration conversation; the conversation itself is not public.

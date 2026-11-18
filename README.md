@@ -1,3 +1,5 @@
+<img src="extension/assets/icon128.png" alt="Tab Zoo: a red pixel T-rex in a browser window" width="128" />
+
 # Tab Zoo 🦕
 
 > Your open tabs become pixel animals that grow, sleep, and vanish.
