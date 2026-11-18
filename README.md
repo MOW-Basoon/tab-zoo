@@ -2,6 +2,8 @@
 
 # Tab Zoo 🦕
 
+원작자: [dongseok2001-creator](https://github.com/dongseok2001-creator).
+
 > Your open tabs become pixel animals that grow, sleep, and vanish.
 
 열어 둔 브라우저 탭이 작은 도트 동물이 되어 자라는 Chrome 확장 프로그램입니다.
