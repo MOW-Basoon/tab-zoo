@@ -37,6 +37,16 @@ Tab Zoo는 열린 웹사이트를 작은 동물로 보여주는 브라우저 확
 
 ## 제출 전에 남은 일
 
+**준비한 자료**
+
+[소형 홍보 이미지 (440×280)](store/tab-zoo-promo-440x280.png)에는 승인된 티라노 아이콘을 사용했다. [한국어 스토어 소개 화면 (1280×800)](store/tab-zoo-listing-1280x800.png)은 별도 시험에서 캡처한 동물원과 화석 컬렉션을 나란히 배치한 시안이다. 두 화면은 서로 다른 시험 데이터이며 동물원의 체류 시간은 시험용으로 설정했다. 동물원 화면에 표시된 버전은 0.1.13이다. 0.1.14는 아이콘을 변경했으며 팝업 동작 코드는 같다.
+
+**심사 메모 초안 (영문)**
+
+No account is needed. In a fresh test profile, open example.org, then open Tab Zoo from the toolbar. The site appears as an egg. Keep the site in the foreground for a minute to see it grow. Close the last tab for that site, reopen Tab Zoo, and select 화석 컬렉션 (Fossil collection). Look for example.org. To remove just that entry, choose 삭제 (Delete) on its row.
+
+To check the optional tab-group feature in Chrome or Edge, name a tab group exactly `Agent Tabs` and navigate a grouped tab to example.net. After closing the tab, open the collection and look for example.net with an Agent Tabs count. This tests recognition of a group name. An ordinary visit outside that group should not increase that count. The feature does not require an AI account.
+
 1. `npm test`, `npm run package:extension`을 최종 커밋에서 실행하고 ZIP의 루트에 `manifest.json`과 필요한 파일이 있는지 확인한다. Chrome과 Edge의 실제 설치·업데이트·삭제, 일반 탭과 Agent Tabs, 화석 삭제를 각각 확인한다.
 2. Chrome 웹스토어 개발자 계정과 Microsoft Partner Center의 Edge 개발자 계정의 소유자·접근 권한·연락처를 확인한다. Chrome 개발자 등록에는 일회성 등록비가 필요하다. 계정 가입, 결제, 제출 또는 공개 여부가 이미 승인됐다고 가정하지 않는다.
 3. 실제 실행 화면으로 스토어 스크린샷을 준비한다. Chrome은 1280×800 또는 640×400, Edge는 1280×800 또는 640×480을 허용하므로 1280×800은 공통 후보다. Chrome용 440×280 소형 홍보 이미지도 준비한다. 스토어의 최신 규격과 이미지 승인 상태는 제출 직전 확인한다.
