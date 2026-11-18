@@ -1,5 +1,11 @@
 # Animal atlas
 
+## T-rex browser icon
+
+`tab-zoo-trex-browser-source.png` is an AI-generated icon concept produced by `mow-coding`'s Codex with the existing `adult-favicon-atlas.png` as a character reference. `mow-coding` reviewed and approved the red right-facing T-rex, dark green background and white browser frame in the collaboration conversation on 2026-11-18. It is a newly generated interpretation, not a pixel-identical crop of the atlas. See `docs/decisions.md` for the decision history.
+
+`scripts/build-icons.ps1` creates the 16, 32, 48 and 128 pixel PNG files from this source. The 128 pixel store icon has a 16 pixel transparent inset on each side.
+
 `animal-atlas.png` was generated with an AI image generation tool from the approved Tab Zoo UI concept on 2026-09-11. This is a generated reconstruction, not a pixel-identical crop of the concept image.
 
 Final generation prompt:
