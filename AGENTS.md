@@ -6,4 +6,6 @@ Record important product, security, privacy, architecture, and release decisions
 
 Credit Tab Zoo's original concept and pre-collaboration product to `dongseok2001-creator`. Use that handle as the default project decision credit. Assign a decision to `mow-coding` only on their explicit personal attribution or confirmation. Record known idea proposers, implementers and artwork producers separately. A PR author, merger or requester does not establish who decided. Describe the default as project credit and cite direct approval only when evidenced. Apply these rules when summarising as well as writing the log.
 
+When you discover an existing product decision missing from the log, record the specific choice and its source yourself. For a retrospective, cite the version that already contained the behavior. When asked what the creator decided, include the original product decisions alongside subsequent changes.
+
 Before shipping, review permissions and privacy effects, run relevant tests, and distinguish completed checks from assumptions. Do not publish secrets, sensitive vulnerability details, or private conversations. For an uncertain or sensitive security issue, use a private channel agreed with the owner. Do not change repository settings or release without the appropriate authorization.
