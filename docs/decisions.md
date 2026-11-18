@@ -25,3 +25,12 @@ Important decisions belong here, not every small edit. Use GitHub handles, disti
 - Rationale: `uos.ac.kr` and `portal.uos.ac.kr` feel like one site. A maintained public suffix list avoids a manually maintained list of websites, while recognizing shared hosting boundaries. This is a practical heuristic, not proof of common ownership.
 - Evidence: collaboration planning conversation; [Public Suffix List](https://publicsuffix.org/); [tldts documentation](https://github.com/remusao/tldts).
 - Implementation: `mow-coding`'s Codex selected bundled `tldts` 7.5.4 with private suffixes enabled. It is an implementation choice under the approved behavior, not a claim that the owner personally chose this library. Update the bundled version and license together when the list is refreshed.
+
+## 2026-11-18 — Explore AI agent browsing in Tab Zoo
+
+- Status: proposal; product design and feasibility not yet decided.
+- Proposer: `mow-coding` (human), who reports having discussed the idea previously with `dongseok2001-creator`.
+- Idea: people are not the only browser users; exploring where AI agents browse could be an interesting use for Tab Zoo. Consider supporting Chrome, Edge, and Aside.
+- Context: the current extension is built around open tabs and focused activity. Whether it can observe an agent's tabs, distinguish them from a person's tabs, or retain activity after tabs close depends on the browser, profile, APIs, and agent. None of those capabilities is confirmed here.
+- Before implementing: investigate browser support and privacy, agree what activity should be shown and for how long, and obtain product direction for any UI changes. Do not assume access to other profiles, separate agent browsers, or private task details.
+- Evidence: `mow-coding`'s description in the collaboration conversation; details of the earlier discussion have not been independently established.
