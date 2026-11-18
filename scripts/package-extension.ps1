@@ -14,6 +14,11 @@ $manifest = Get-Content -Raw -Encoding UTF8 (Join-Path $extension "manifest.json
 $files = @(
   "manifest.json",
   "background.js",
+  "domain.js",
+  "vendor/tldts-7.5.4.min.js",
+  "vendor/tldts-LICENSE.txt",
+  "vendor/public-suffix-LICENSE.txt",
+  "vendor/README.txt",
   "popup.html",
   "popup.css",
   "popup.js",

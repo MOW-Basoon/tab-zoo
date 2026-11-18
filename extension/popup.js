@@ -114,16 +114,6 @@ function applyMapTheme(value) {
   return theme;
 }
 
-function domainFromUrl(url) {
-  try {
-    const parsed = new URL(url);
-    if (!["http:", "https:"].includes(parsed.protocol)) return null;
-    return parsed.hostname.replace(/^www\./, "").toLowerCase();
-  } catch {
-    return null;
-  }
-}
-
 function hashText(text) {
   let hash = 2166136261;
   for (let index = 0; index < text.length; index += 1) {
@@ -162,8 +152,7 @@ function rootName(domain, pageUrl) {
     return googleServices[service]
       ?? `Google ${service.charAt(0).toUpperCase()}${service.slice(1)}`;
   }
-  const parts = domain.split(".");
-  const root = parts.length > 1 ? parts[parts.length - 2] : parts[0];
+  const root = tldts.getDomainWithoutSuffix(domain, { allowPrivateDomains: true }) || domain;
   return knownSites[root] ?? root.charAt(0).toUpperCase() + root.slice(1);
 }
 
@@ -504,7 +493,7 @@ async function init() {
     if (!byDomain.has(domain) || tab.active) byDomain.set(domain, tab);
   }
   const grouped = [...byDomain.entries()].slice(0, 10);
-  const colorCache = cached[COLOR_KEY] ?? {};
+  const colorCache = Object.assign(Object.create(null), cached[COLOR_KEY] ?? {});
   const now = snapshot.now ?? Date.now();
   const models = [];
 

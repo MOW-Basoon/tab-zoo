@@ -52,7 +52,10 @@ test("repeated resets clear the current species map and tracking records", async
 
   const source = await readFile(new URL("background.js", extensionRoot), "utf8");
   const context = vm.createContext({ chrome, console, URL });
-  vm.runInContext(source, context);
+  const vendor = await readFile(new URL("vendor/tldts-7.5.4.min.js", extensionRoot), "utf8");
+  const domain = await readFile(new URL("domain.js", extensionRoot), "utf8");
+  context.importScripts = () => {};
+  vm.runInContext(vendor + "\n" + domain + "\n" + source, context);
 
   const reset = () => new Promise((resolve) => {
     const handled = runtimeMessage.listener({ type: "reset" }, {}, resolve);

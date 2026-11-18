@@ -55,9 +55,46 @@ async function loadBackground({ openTabs, state }) {
 
   const source = await readFile(new URL("background.js", extensionRoot), "utf8");
   const context = vm.createContext({ chrome, console, URL });
-  vm.runInContext(source, context);
-  return { chrome, data, drain: () => vm.runInContext("taskQueue", context) };
+  const vendor = await readFile(new URL("vendor/tldts-7.5.4.min.js", extensionRoot), "utf8");
+  const domain = await readFile(new URL("domain.js", extensionRoot), "utf8");
+  context.importScripts = () => {};
+  vm.runInContext(vendor + "\n" + domain + "\n" + source, context);
+  return { chrome, data, context, drain: () => vm.runInContext("taskQueue", context) };
 }
+
+test("subdomains share an animal and the final close removes the combined record", async () => {
+  const state = baseState();
+  state.records = { "uos.ac.kr": record(60000), "portal.uos.ac.kr": { ...record(120000), url: "https://portal.uos.ac.kr/private?token=example", title: "private" } };
+  state.speciesMap = { "uos.ac.kr": "cat", "portal.uos.ac.kr": "fox" };
+  state.seenTabs = { 1: "uos.ac.kr", 2: "portal.uos.ac.kr" };
+  state.session = { tabId: 2, domain: "portal.uos.ac.kr", startedAt: 1, lastHeartbeatAt: 1 };
+  const openTabs = [{ id: 2, url: "https://portal.uos.ac.kr/" }];
+  const { chrome, data, drain } = await loadBackground({ openTabs, state });
+  chrome.tabs.onRemoved.listener(1);
+  await drain();
+  const merged = data.tabZooStateV1;
+  assert.equal(merged.records["uos.ac.kr"].totalMs, 180000);
+  assert.equal(merged.speciesMap["uos.ac.kr"], "fox");
+  assert.equal(merged.records["uos.ac.kr"].url, undefined);
+  assert.equal(merged.records["uos.ac.kr"].title, undefined);
+  assert.equal(merged.seenTabs[2], "uos.ac.kr");
+  openTabs.length = 0;
+  chrome.tabs.onRemoved.listener(2);
+  await drain();
+  assert.equal(data.tabZooStateV1.records["uos.ac.kr"], undefined);
+});
+
+test("tracking does not persist a tab's full URL or title", async () => {
+  const state = baseState();
+  const { data, context } = await loadBackground({ openTabs: [], state });
+  context.tab = { id: 42, windowId: 1, url: "https://portal.uos.ac.kr/private?token=example", title: "private title" };
+  await vm.runInContext("beginTab(tab, 100000)", context);
+  const record = data.tabZooStateV1.records["uos.ac.kr"];
+  assert.ok(record);
+  assert.equal(record.url, undefined);
+  assert.equal(record.title, undefined);
+  assert.doesNotMatch(JSON.stringify(data.tabZooStateV1), /token=example|private title/);
+});
 
 function baseState() {
   return {

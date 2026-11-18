@@ -1,6 +1,6 @@
 # Tab Zoo 개인정보처리방침
 
-최종 수정일: 2026년 11월 3일
+최종 수정일: 2026년 11월 18일
 
 Tab Zoo(이하 "확장 프로그램")는 열린 탭의 사용 습관을 작은 도트 동물로 보여주는 Chrome 확장 프로그램입니다. 이 방침은 확장 프로그램이 어떤 정보를 다루는지 설명합니다.
 
@@ -8,9 +8,9 @@ Tab Zoo(이하 "확장 프로그램")는 열린 탭의 사용 습관을 작은 �
 
 확장 프로그램은 동물을 만들고 키우기 위해 아래 정보를 **사용자의 브라우저 안(`chrome.storage.local`)에만** 저장합니다.
 
-- 웹 탭의 주소(URL), 도메인, 페이지 제목
+- 사이트 구분을 위한 등록 가능 도메인 (주소를 읽어 계산하며 전체 URL과 페이지 제목은 저장하지 않음)
 - 사이트별 체류 시간, 최근 방문 시각, 탭 전환 횟수
-- 사이트별로 배정된 동물 종과 파비콘에서 추출한 대표 색
+- 사이트별로 배정된 동물 종, 파비콘에서 추출한 대표 색, 동물의 화면 위치
 - 맵 선택, 알 숨기기 같은 화면 설정
 
 브라우저의 유휴 상태(입력 없음·화면 잠금)는 자리를 비운 시간을 체류 시간에서 빼는 데만 사용하며 따로 저장하지 않습니다.
@@ -23,9 +23,10 @@ Tab Zoo(이하 "확장 프로그램")는 열린 탭의 사용 습관을 작은 �
 
 ## 보관 기간과 삭제
 
-- 어떤 사이트를 연 탭을 모두 닫으면 그 사이트의 기록이 삭제됩니다.
-- 브라우저를 종료했다가 다시 실행하면 모든 동물과 기록이 삭제됩니다.
-- 팝업의 초기화(↻) 버튼으로 언제든 모든 기록을 삭제할 수 있습니다.
+- 같은 등록 가능 도메인에 속하는 탭을 모두 닫으면 그 사이트의 동물과 사용 기록이 삭제됩니다.
+- 브라우저를 종료했다가 다시 실행하면 모든 동물과 사용 기록이 삭제됩니다.
+- 팝업의 초기화(↻) 버튼으로 동물과 사용 기록을 삭제할 수 있습니다. 맵 설정과 사이트별 색상은 유지됩니다.
+- 사이트별 색상과 화면 위치 캐시는 사용 기록과 별도로 남을 수 있습니다. 확장 프로그램을 제거하면 함께 삭제됩니다.
 - 확장 프로그램을 제거하면 저장된 모든 정보가 함께 삭제됩니다.
 
 ## 문의
@@ -36,7 +37,7 @@ Tab Zoo(이하 "확장 프로그램")는 열린 탭의 사용 습관을 작은 �
 
 # Tab Zoo Privacy Policy
 
-Last updated: November 3, 2026
+Last updated: November 18, 2026
 
 Tab Zoo ("the extension") shows your open tabs as small pixel animals that grow with your browsing habits.
 
@@ -44,9 +45,9 @@ Tab Zoo ("the extension") shows your open tabs as small pixel animals that grow 
 
 To create and grow the animals, the extension stores the following **only inside your browser (`chrome.storage.local`)**:
 
-- URL, domain and title of web tabs
+- Registrable domain derived from a tab URL (full URLs and page titles are not stored)
 - Time spent per site, recent visit times and tab switch counts
-- The animal species assigned to each site and a colour taken from its favicon
+- The animal species assigned to each site, a colour taken from its favicon, and its position on the map
 - Display preferences such as the selected map and whether eggs are hidden
 
 The browser's idle state (no input or screen locked) is used only to exclude time away from the time spent, and is not stored.
@@ -59,9 +60,10 @@ The browser's idle state (no input or screen locked) is used only to exclude tim
 
 ## Retention and deletion
 
-- Closing every tab of a site deletes that site's record.
-- Restarting the browser deletes all animals and records.
-- The reset (↻) button in the popup deletes all records at any time.
+- Closing every tab for a registrable domain deletes that site's animal and usage record.
+- Restarting the browser deletes all animals and usage records.
+- The reset (↻) button deletes animals and usage records; map settings and site colours remain.
+- Site-colour and position caches may remain separately from usage records until the extension is removed.
 - Uninstalling the extension deletes all stored data.
 
 ## Contact
