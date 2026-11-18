@@ -2,7 +2,7 @@
 
 # Tab Zoo 🦕
 
-원작자: [dongseok2001-creator](https://github.com/dongseok2001-creator).
+열어 둔 사이트를 동물원으로 보여 준다는 핵심 아이디어는 원작자 [DS](https://github.com/dongseok2001-creator)가 직접 정했습니다. 공동 작업자 `basoon`의 설명에 따르면 초기 버전의 구현은 대부분 원작자의 Claude가 맡았습니다. 기능별 제안·결정·승인·구현 근거는 [결정 기록](docs/decisions.md)에 남깁니다.
 
 > Your open tabs become pixel animals that grow, sleep, and vanish.
 

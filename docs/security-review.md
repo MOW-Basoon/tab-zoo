@@ -1,6 +1,6 @@
 # Security and privacy review — 2026-11-18
 
-Reviewer: `mow-coding`'s Codex. Scope: extension runtime source, manifest, privacy notice, and packaging script in this branch. This is a source review, not an external penetration test or proof of complete security.
+Reviewer: `basoon (Codex)`. Scope: extension runtime source, manifest, privacy notice, and packaging script in this branch. This is a source review, not an external penetration test or proof of complete security.
 
 - The extension requests `tabs`, `storage`, `favicon`, `idle`, and `alarms`; `tabs` exposes sensitive browsing metadata and is needed for the current automatic grouping feature. Reconsider the permission if the feature changes.
 - The previous background worker stored the full URL and title even though the popup did not use them. URLs may contain sensitive information. This change stops writing those fields and removes legacy fields as state is next read and saved.
