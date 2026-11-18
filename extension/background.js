@@ -12,6 +12,9 @@ const IDLE_SECONDS = 5 * 60;
 const HEARTBEAT_ALARM = "tab-zoo-heartbeat";
 const HEARTBEAT_MINUTES = 1;
 const SESSION_STALE_MS = 2 * 60 * 1000;
+const AGENT_GROUP_TITLE = "Agent Tabs";
+const agentGroups = new Set();
+let agentGroupsReady = Promise.resolve();
 
 let taskQueue = Promise.resolve();
 
@@ -24,6 +27,7 @@ function emptyState() {
   return {
     domainGroupingVersion: 1,
     fossils: [],
+    agentSeenTabs: {},
     records: {},
     seenTabs: {},
     registeredTabs: {},
@@ -41,6 +45,7 @@ async function readState() {
   const state = stored[STORAGE_KEY] ?? emptyState();
   state.records = Object.assign(Object.create(null), state.records ?? {});
   state.fossils ??= [];
+  state.agentSeenTabs ??= {};
   state.seenTabs ??= {};
   state.registeredTabs ??= {};
   state.activationGate ??= false;
@@ -106,6 +111,28 @@ function assignSpecies(state, domain) {
 
 async function writeState(state) {
   await chrome.storage.local.set({ [STORAGE_KEY]: state });
+}
+
+// Aside exposes its Agent Tabs as a normal tab group. This is a group label,
+// not proof of who opened a tab, and cannot observe activity outside this profile.
+async function recordAgentTab(tab, url = tab?.url) {
+  if (!tab?.id || !agentGroups.has(tab.groupId)) return;
+  const domain = domainFromUrl(url);
+  if (!domain) return;
+  const state = await readState();
+  const key = String(tab.id);
+  if (state.agentSeenTabs[key] === domain) return;
+  state.agentSeenTabs[key] = domain;
+  const now = Date.now();
+  let fossil = state.fossils.find(item => item.source === "agent-group" && item.domain === domain);
+  if (fossil) {
+    fossil.visits += 1;
+    fossil.departedAt = now;
+  } else {
+    fossil = { id: crypto.randomUUID(), domain, species: species[Math.floor(Math.random() * species.length)], totalMs: 0, departedAt: now, source: "agent-group", visits: 1 };
+    state.fossils.push(fossil);
+  }
+  await writeState(state);
 }
 
 function ensureRecord(state, domain) {
@@ -253,6 +280,7 @@ async function forgetPreviousBrowserSession() {
   const state = await readState();
   state.seenTabs = {};
   state.registeredTabs = {};
+  state.agentSeenTabs = {};
   state.session = null;
   forgetDomains(state, new Set());
   await Promise.all([
@@ -275,6 +303,7 @@ async function resetTracking() {
   const state = {
     domainGroupingVersion: 1,
     fossils: previousState.fossils,
+    agentSeenTabs: {},
     records: {},
     seenTabs: {},
     registeredTabs: {},
@@ -294,6 +323,27 @@ async function resetTracking() {
 
 chrome.idle.setDetectionInterval(IDLE_SECONDS);
 ensureHeartbeatAlarm().catch((error) => console.error("Tab Zoo:", error));
+
+if (chrome.tabGroups) {
+  // Seed the cache on worker startup; group events are observed synchronously,
+  // so quick tab closures cannot erase the group name before queued processing.
+  agentGroupsReady = chrome.tabGroups.query({ title: AGENT_GROUP_TITLE }).then(groups => {
+    for (const group of groups) agentGroups.add(group.id);
+  }).catch(error => console.error("Tab Zoo groups:", error));
+  chrome.tabGroups.onCreated.addListener(group => {
+    if (group.title === AGENT_GROUP_TITLE) agentGroups.add(group.id);
+  });
+  chrome.tabGroups.onUpdated.addListener(group => {
+    if (group.title === AGENT_GROUP_TITLE) {
+      agentGroups.add(group.id);
+      enqueue(async () => {
+        const tabs = await chrome.tabs.query({ groupId: group.id });
+        for (const tab of tabs) await recordAgentTab(tab);
+      });
+    } else agentGroups.delete(group.id);
+  });
+  chrome.tabGroups.onRemoved.addListener(group => { enqueue(() => agentGroups.delete(group.id)); });
+}
 
 chrome.runtime.onInstalled.addListener(() => {
   enqueue(async () => {
@@ -320,7 +370,14 @@ chrome.tabs.onActivated.addListener(({ tabId }) => {
   });
 });
 
+chrome.tabs.onCreated?.addListener(tab => {
+  if (tab.groupId >= 0) enqueue(async () => { await agentGroupsReady; await recordAgentTab(tab); });
+});
+
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (tab.groupId >= 0 && (changeInfo.url || Object.hasOwn(changeInfo, "groupId") || changeInfo.status === "loading")) {
+    enqueue(async () => { await agentGroupsReady; await recordAgentTab(tab, changeInfo.url || tab.url); });
+  }
   if (!tab.active) return;
   if (changeInfo.url || changeInfo.status === "loading") {
     enqueue(async () => {
@@ -348,6 +405,7 @@ chrome.tabs.onRemoved.addListener((tabId) => {
     expireStaleSession(state, Date.now());
     delete state.seenTabs[String(tabId)];
     delete state.registeredTabs[String(tabId)];
+    delete state.agentSeenTabs[String(tabId)];
     if (state.session?.tabId === tabId) {
       settleSession(state, Date.now());
     }
