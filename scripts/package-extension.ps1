@@ -11,7 +11,8 @@ $root = Split-Path -Parent $PSScriptRoot
 $extension = Join-Path $root "extension"
 $manifest = Get-Content -Raw -Encoding UTF8 (Join-Path $extension "manifest.json") | ConvertFrom-Json
 
-$files = @(
+$projectNotices = @("LICENSE", "licenses/MIT-through-0.1.14.txt")
+$files = $projectNotices + @(
   "manifest.json",
   "background.js",
   "domain.js",
@@ -43,7 +44,8 @@ if (Test-Path $zipPath) { Remove-Item -Force $zipPath }
 $zip = [System.IO.Compression.ZipFile]::Open($zipPath, [System.IO.Compression.ZipArchiveMode]::Create)
 try {
   foreach ($file in $files) {
-    $source = Join-Path $extension $file
+    $sourceRoot = if ($file -in $projectNotices) { $root } else { $extension }
+    $source = Join-Path $sourceRoot $file
     if (-not (Test-Path $source)) { throw "Missing extension file: $file" }
     [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile(
       $zip, $source, $file, [System.IO.Compression.CompressionLevel]::Optimal

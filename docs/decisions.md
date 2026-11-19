@@ -215,3 +215,14 @@ Prepare listing copy, permission explanations and visual assets so reviewers can
 - Basis: basoon clarified the original roles, chose the aliases, and requested this repository-wide correction. [PR #7](https://github.com/dongseok2001-creator/tab-zoo/pull/7) and [PR #8](https://github.com/dongseok2001-creator/tab-zoo/pull/8) preserve the earlier retrospective.
 
 The earlier log gave DS default decision credit for unattributed choices. This correction replaces that rule. Record the specific actor and the evidence for each role. basoon's account credits DS with the core idea and DS's Claude with most early implementation. Individual decisions can be updated as more evidence becomes available.
+
+## 2026-11-19 — Adopt PolyForm Perimeter from 0.1.15
+
+- Status: adopted.
+- Proposed by: basoon (Codex)
+- Decided by: DS (human), basoon (human)
+- Approved by: DS (human), basoon (human)
+- Implemented by: basoon (Codex)
+- Basis: basoon wanted publicly inspectable source and protection against monetized clones. basoon's Codex proposed Perimeter. basoon instructed adoption and reported DS's prior agreement.
+
+Keep the repository public. From 0.1.15 use [PolyForm Perimeter 1.0.1](../LICENSE) for the project's own work. The grant permits ordinary use, including at work, and restricts providing competing products to others, including free competitors. Copies already made available under MIT through 0.1.14 retain those permissions. Preserve the [historical MIT notice](../licenses/MIT-through-0.1.14.txt) and the bundled dependencies' own notices in the store package.
