@@ -292,3 +292,14 @@ Chrome에 먼저 제출한다. 게시자 MOW, 공개 연락처 hello@mow.codes, 
 - Basis: basoon requested the three features. basoon's Codex selected the following implementation details without a separate human design review.
 
 도감에는 발견한 종 ID만 저장한다. 기존 배정과 화석에서 발견 종을 복원하고, 화석을 삭제해도 발견 종은 보존한다. 클릭은 탭 열기, 길게 누르거나 끌기는 들어 올리기, 빠른 방향 반전 세 번은 어지럼 반응으로 구분한다. 시스템의 모션 감소 설정을 따른다. 같은 사이트의 표시 대상 탭 중 하나라도 HTTP면 괴물 한 마리가 그 HTTP 탭을 가리킨다. 괴물은 기존 종의 임시 모습이며 악성 사이트 판정이나 도감 수집 대상이 아니다.
+
+## 2026-11-22 — 동물 잡기 동작 다듬기
+
+- Status: implemented.
+- Proposed by: basoon (human)
+- Decided by: basoon (Codex)
+- Approved by: unknown
+- Implemented by: basoon (Codex)
+- Basis: basoon asked for a more natural implementation of the preceding interaction. basoon's Codex chose the landing and animation details.
+
+동물을 놓으면 끌어간 위치에 내려앉고, 걷는 생물은 잠시 쉰 뒤 이어서 움직인다. 들어 올릴 때 작은 몸짓을 하고, 흔든 뒤에는 천천히 흔들리며 회복한다. 움직임 줄이기 설정을 존중한다.

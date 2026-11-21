@@ -670,12 +670,19 @@ footer nav button { font-size:9px; }
 .creature-button { touch-action:none; user-select:none; }
 .creature.held { z-index:39; }
 .creature.held .creature-button { cursor:grabbing; }
-.creature.held .sprite-stage { animation:struggle 160ms steps(2,end) infinite alternate; }
+.creature.held .sprite-scale { animation:lifted-struggle 420ms ease-in-out infinite; }
 .creature.dizzy .creature-button::after { content:"✦ · ✦"; position:absolute; bottom:100%; left:50%; transform:translateX(-50%); white-space:nowrap; color:#fff1a0; text-shadow:1px 1px #32213d; }
 .creature.http-monster .sprite-scale { transform:scale(.65); }
 .creature.http-monster .creature-button { min-width:48px; min-height:42px; }
 .creature.http-monster .sleep-puff { display:none; }
-@keyframes struggle { from { rotate:-9deg; } to { rotate:9deg; } }
-.creature.dizzy:not(.held) .sprite-stage { animation:struggle 360ms ease-in-out infinite alternate; }
-@media (prefers-reduced-motion:reduce) { .creature.dizzy:not(.held) .sprite-stage { animation:none; } }
-@media (prefers-reduced-motion:reduce) { .creature.held .sprite-stage { animation:none; } }
+@keyframes lifted-struggle {
+  0%,100% { rotate:-4deg; translate:0 -4px; }
+  25% { rotate:3deg; translate:1px -6px; }
+  55% { rotate:-2deg; translate:-1px -5px; }
+  75% { rotate:5deg; translate:1px -4px; }
+}
+@keyframes land { 0% { translate:0 -5px; } 55% { translate:0 2px; } 100% { translate:0 0; } }
+@keyframes dizzy-sway { 0%,100% { rotate:-4deg; } 50% { rotate:4deg; } }
+.creature.landing .sprite-stage { animation:land 320ms ease-out; }
+.creature.dizzy:not(.held) .sprite-scale { animation:dizzy-sway 500ms ease-in-out infinite; }
+@media (prefers-reduced-motion:reduce) { .creature.dizzy:not(.held) .sprite-scale,.creature.held .sprite-scale,.creature.landing .sprite-stage { animation:none; } }
