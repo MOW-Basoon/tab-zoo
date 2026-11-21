@@ -259,3 +259,14 @@ Chrome에 먼저 제출한다. 게시자 MOW, 공개 연락처 hello@mow.codes, 
 - Basis: basoon approved connecting a service account with MOW publisher access after reviewing its scope and the restriction to Tab Zoo releases from main.
 
 다음 버전부터 관리자가 GitHub 작업을 직접 실행해 Chrome 심사에 제출할 수 있도록 한다. 별도의 Tab Zoo 배포 프로젝트와 단기 인증을 사용한다. 스토어 초도 심사 중에는 읽기 전용 상태 조회로 연결을 검증한다.
+
+## 2026-11-22 — 버전을 올린 PR 병합으로 Chrome 심사 요청
+
+- Status: adopted.
+- Proposed by: basoon (human)
+- Decided by: basoon (human)
+- Approved by: basoon (human)
+- Implemented by: basoon (Codex)
+- Basis: basoon explicitly requested automatic review submission when a higher extension version is merged into main, while keeping everyday development pushes separate from releases.
+
+버전을 올린 PR을 main에 병합하는 것이 출시 결정이다. GitHub에서 변경 전후 매니페스트를 비교하고 해당 병합을 확인한 후 테스트부터 Chrome 심사 제출까지 수행한다. 이전 수동 제출 절차를 대체한다. Google의 심사 및 승인 후 공개 절차는 그대로 따른다.

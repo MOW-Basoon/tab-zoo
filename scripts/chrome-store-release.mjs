@@ -1,5 +1,6 @@
 import { readFile } from 'node:fs/promises';
 import { setTimeout as sleep } from 'node:timers/promises';
+import { compareVersions } from './chrome-version.mjs';
 
 const api = 'https://chromewebstore.googleapis.com';
 const item = 'publishers/a67f693a-e486-4bbf-a341-3a03de83dacf/items/oiklijhodjopidofbkdbmonoifkakadk';
@@ -22,11 +23,17 @@ const published = status.publishedItemRevisionStatus;
 console.log('Submitted:', submitted ?? 'none', 'Published:', published ?? 'none');
 
 if (OPERATION === 'submit') {
+  const hasVersion = revision => revision?.distributionChannels?.some(channel =>
+    compareVersions(channel.crxVersion, version) === 0);
+  if (hasVersion(published) || (['PENDING_REVIEW', 'STAGED'].includes(submitted?.state) && hasVersion(submitted))) {
+    console.log(`Chrome already has version ${version} published or submitted.`);
+    process.exit(0);
+  }
   if (['PENDING_REVIEW', 'STAGED'].includes(submitted?.state)) {
     throw new Error('A release is already under review or awaiting publication. Check the dashboard.');
   }
-  if (published?.distributionChannels?.some(channel => channel.crxVersion === version)) {
-    throw new Error(`Version ${version} has already been published. Increase the manifest version.`);
+  if (published?.distributionChannels?.some(channel => compareVersions(channel.crxVersion, version) > 0)) {
+    throw new Error(`A newer version than ${version} has already been published.`);
   }
   const zip = await readFile(`outputs/tab-zoo-extension-${version}.zip`);
   const upload = await request(`/upload/v2/${item}:upload`, 'POST', zip);
