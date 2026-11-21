@@ -1,6 +1,6 @@
 # Tab Zoo 개인정보처리방침
 
-최종 수정일: 2026년 11월 18일
+최종 수정일: 2026년 11월 22일
 
 Tab Zoo(이하 "확장 프로그램")는 열린 탭의 사용 습관을 작은 도트 동물로 보여주는 Chrome 확장 프로그램입니다. 이 방침은 확장 프로그램이 어떤 정보를 다루는지 설명합니다.
 
@@ -13,6 +13,7 @@ Tab Zoo(이하 "확장 프로그램")는 열린 탭의 사용 습관을 작은 �
 - 사이트별로 배정된 동물 종, 파비콘에서 추출한 대표 색, 동물의 화면 위치
 - 맵 선택, 알 숨기기 같은 화면 설정
 - 화석 컬렉션의 사이트 도메인, 동물 종류, 체류 시간과 떠난 시각
+- 동물 도감에는 발견한 종의 식별자만 남습니다. 화석 삭제나 동물원 초기화 후에도 유지되며 확장 제거 시 삭제됩니다. HTTP 괴물은 열린 탭의 주소를 보고 표시하며, 별도의 HTTP 방문 기록이나 마우스 제스처 기록은 저장하지 않습니다.
 - `Agent Tabs` 탭 그룹에서 열린 사이트의 도메인, 방문 횟수와 최근 방문 시각. 전체 URL과 페이지 제목은 저장하지 않습니다.
 
 브라우저의 유휴 상태(입력 없음·화면 잠금)는 자리를 비운 시간을 체류 시간에서 빼는 데만 사용하며 따로 저장하지 않습니다.
@@ -40,7 +41,7 @@ Tab Zoo(이하 "확장 프로그램")는 열린 탭의 사용 습관을 작은 �
 
 # Tab Zoo Privacy Policy
 
-Last updated: November 18, 2026
+Last updated: November 22, 2026
 
 Tab Zoo ("the extension") shows your open tabs as small pixel animals that grow with your browsing habits.
 
@@ -53,6 +54,7 @@ To create and grow the animals, the extension stores the following **only inside
 - The animal species assigned to each site, a colour taken from its favicon, and its position on the map
 - Display preferences such as the selected map and whether eggs are hidden
 - Fossil collection entries: site domain, animal species, time spent, and departure time
+- The species guide keeps only the IDs of discovered species until uninstall, including after a zoo reset or fossil deletion. The HTTP monster uses open tab addresses. No separate HTTP history or mouse gesture log is stored.
 - Domain, visit count and most recent visit time for sites opened in a group named `Agent Tabs`; full URLs and page titles are not stored.
 
 The browser's idle state (no input or screen locked) is used only to exclude time away from the time spent, and is not stored.

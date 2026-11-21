@@ -659,3 +659,23 @@ footer button { border:0; padding:0; background:none; color:#ddd; font:inherit; 
 .sprite-facing { position:absolute;inset:0;animation:none;transform-origin:50% 50%; }
 .finished-sprite.sleeping { transform:translateY(5px); }
 @media (prefers-reduced-motion:reduce) { .creature,.pixel-sprite,.sprite-facing,.sleep-puff { animation:none!important; } }
+
+footer nav { display:flex; gap:12px; }
+footer nav button { font-size:9px; }
+#species-guide { width:calc(100% - 16px); max-height:calc(100% - 16px); margin:auto; }
+#guide-list { display:grid; grid-template-columns:repeat(4,1fr); gap:5px; padding:0; list-style:none; }
+#guide-list li { display:grid; justify-items:center; align-content:end; background:#213128; border:1px solid #425245; padding:4px; font-size:10px; }
+#guide-list li > svg, #guide-list li > span { width:40px; height:36px; }
+#guide-list li > span { display:grid; place-items:center; color:#829684; font:18px monospace; }
+.creature-button { touch-action:none; user-select:none; }
+.creature.held { z-index:39; }
+.creature.held .creature-button { cursor:grabbing; }
+.creature.held .sprite-stage { animation:struggle 160ms steps(2,end) infinite alternate; }
+.creature.dizzy .creature-button::after { content:"✦ · ✦"; position:absolute; bottom:100%; left:50%; transform:translateX(-50%); white-space:nowrap; color:#fff1a0; text-shadow:1px 1px #32213d; }
+.creature.http-monster .sprite-scale { transform:scale(.65); }
+.creature.http-monster .creature-button { min-width:48px; min-height:42px; }
+.creature.http-monster .sleep-puff { display:none; }
+@keyframes struggle { from { rotate:-9deg; } to { rotate:9deg; } }
+.creature.dizzy:not(.held) .sprite-stage { animation:struggle 360ms ease-in-out infinite alternate; }
+@media (prefers-reduced-motion:reduce) { .creature.dizzy:not(.held) .sprite-stage { animation:none; } }
+@media (prefers-reduced-motion:reduce) { .creature.held .sprite-stage { animation:none; } }

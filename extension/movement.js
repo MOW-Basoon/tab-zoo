@@ -77,7 +77,7 @@ function startZooMotion(container) {
     if(document.hidden) return;
     for(const state of states.values()) {
       const {el,sprite,button}=state;
-      const frozen=reduced.matches || el.matches(':hover,:focus-within,.egg,.asleep') || el.hidden;
+      const frozen=reduced.matches || el.matches(':hover,:focus-within,.egg,.asleep,.held,.dizzy') || el.hidden;
       if(frozen) {sprite.style.transform=`scaleX(${state.facing})`;continue;}
       state.wait-=50;
       if(state.wait>0) continue;
