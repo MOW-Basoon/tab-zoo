@@ -1,26 +1,52 @@
 name: Chrome Web Store package
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
     inputs:
       operation:
-        description: "package = build only, status = verify the store connection, submit = upload and request review"
+        description: "package = build only, status = verify the store connection"
         type: choice
         required: true
         default: package
-        options: [package, status, submit]
-
-concurrency:
-  group: tab-zoo-chrome-store
-  cancel-in-progress: false
+        options: [package, status]
 
 permissions:
   contents: read
 
 jobs:
-  package:
-    if: github.ref == 'refs/heads/main'
+  release-check:
+    if: github.event_name == 'push' && !github.event.created && !github.event.deleted && !github.event.forced
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      operation: ${{ steps.check.outputs.operation }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - id: check
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/chrome-release-gate.mjs
+
+  package:
+    needs: release-check
+    if: >-
+      always() && !cancelled() && github.ref == 'refs/heads/main' &&
+      ((github.event_name == 'workflow_dispatch' && (inputs.operation == 'package' || inputs.operation == 'status')) ||
+       (needs.release-check.result == 'success' && needs.release-check.outputs.operation == 'submit'))
+    runs-on: ubuntu-latest
+    concurrency:
+      group: tab-zoo-chrome-store-${{ github.event_name }}
+      cancel-in-progress: false
+    env:
+      OPERATION: ${{ github.event_name == 'push' && 'submit' || inputs.operation }}
     timeout-minutes: 10
     permissions:
       contents: read
@@ -43,18 +69,17 @@ jobs:
           if-no-files-found: error
           retention-days: 3
       - name: Sign in to the Chrome Web Store
-        if: inputs.operation != 'package'
+        if: env.OPERATION != 'package'
         id: store
         uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3
         with:
           workload_identity_provider: projects/600317457896/locations/global/workloadIdentityPools/github/providers/store
           service_account: store-release@mow-tab-zoo-release.iam.gserviceaccount.com
           token_format: access_token
-          access_token_scopes: ${{ inputs.operation == 'status' && 'https://www.googleapis.com/auth/chromewebstore.readonly' || 'https://www.googleapis.com/auth/chromewebstore' }}
+          access_token_scopes: ${{ env.OPERATION == 'status' && 'https://www.googleapis.com/auth/chromewebstore.readonly' || 'https://www.googleapis.com/auth/chromewebstore' }}
           create_credentials_file: false
       - name: Check status or submit package
-        if: inputs.operation != 'package'
+        if: env.OPERATION != 'package'
         env:
           CWS_TOKEN: ${{ steps.store.outputs.access_token }}
-          OPERATION: ${{ inputs.operation }}
         run: node scripts/chrome-store-release.mjs

@@ -55,10 +55,12 @@ To check the optional tab-group feature in Chrome or Edge, name a tab group exac
 
 ## 다음 Chrome 버전 준비
 
-1. `extension/manifest.json`의 버전을 올리고 변경을 검증해 main에 병합한다.
-2. GitHub의 **Actions → Chrome Web Store package → Run workflow**에서 main을 선택한다. 작업 종류를 `submit`으로 지정하면 GitHub가 테스트와 패키징을 실행하고 같은 Tab Zoo 항목에 새 버전을 올려 심사에 제출한다. ZIP을 PC로 내려받을 필요가 없다. `package`는 패키지만 만들고 `status`는 현재 스토어 상태를 읽는다. GitHub에 보관되는 ZIP은 3일 뒤 만료된다.
+1. 평소 기능 PR은 기존 버전으로 main에 병합한다. 출시할 때 `extension/manifest.json`의 `version`을 올린 PR을 main에 병합한다. 예를 들어 `0.1.15`에서 `0.1.16`으로 올린다.
+2. GitHub가 병합 전후 버전을 숫자로 비교하고 병합된 PR과 커밋이 일치하면 테스트·패키징·업로드·심사 요청을 자동으로 실행한다. 버전이 같은 병합, 개발 브랜치 푸시, main 직접 푸시는 제출 대상에서 제외한다. ZIP은 GitHub에서 3일 뒤 만료된다. 수동 실행의 `package`와 `status`로 각각 패키지 생성과 상태 조회도 가능하다.
 3. 실행 로그에서 Google의 접수 결과를 확인한다. 공식 스토어로 설치한 사용자는 승인·게시 후 Chrome의 업데이트 주기에 따라 새 버전을 받는다. [Chrome 업데이트 안내](https://developer.chrome.com/docs/extensions/develop/concepts/extensions-update-lifecycle)
 
 자동화 인증은 Google Cloud의 단기 토큰을 쓴다. Google은 저장소·소유 조직의 숫자 ID, main 브랜치, 실행 방식과 워크플로 파일을 확인한다. Google의 서비스 계정 연결 권한은 MOW 게시자 전체에 적용되며 이 워크플로에서 사용하는 항목 ID는 Tab Zoo로 고정했다. [Chrome Web Store API](https://developer.chrome.com/docs/webstore/using-api)
+
+다른 버전이 심사 중이거나 게시 대기 중이면 해당 작업이 중단된다. 먼저 진행 중인 버전의 결과를 확인하고 원래 버전 병합 작업에서 **Re-run all jobs**를 선택한다. 같은 버전이 이미 심사 중이거나 게시됐으면 재실행해도 중복 제출하지 않는다.
 
 참고: [Chrome 게시](https://developer.chrome.com/docs/webstore/publish), [Chrome 이미지](https://developer.chrome.com/docs/webstore/images), [Chrome 개발자 등록](https://developer.chrome.com/docs/webstore/register), [Chrome 개인정보 항목](https://developer.chrome.com/docs/webstore/cws-dashboard-privacy), [Edge 게시](https://learn.microsoft.com/en-us/microsoft-edge/extensions/publish/publish-extension).
