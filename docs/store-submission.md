@@ -1,6 +1,8 @@
-# Chrome·Edge 스토어 제출 준비
+# Chrome·Edge 스토어 배포
 
-이 문서는 등록정보 **초안**이다. 게시 계정, 스토어 등록 상태와 제출 여부는 아직 확인되지 않았다. 확장 프로그램 버전 `0.1.15` 기준이며, 제출 전 실제 패키지와 다시 대조한다. ZIP에는 현행 PolyForm Perimeter 1.0.1, 기존 MIT 고지, 외부 구성요소 고지를 함께 담는다.
+2026-11-22에 Chrome 웹스토어가 Tab Zoo `0.1.15`를 접수했고 상태 화면에 **검토 대기 중**이 표시됐다. 항목 ID는 `oiklijhodjopidofbkdbmonoifkakadk`다. 무료·공개·전체 지역으로 설정했고, 심사를 통과하면 자동 게시된다. 공개 설치와 스토어를 통한 버전 업데이트는 게시 후 확인한다. Edge Add-ons 제출은 보류했다.
+
+게시자는 **MOW**, 인증된 공개 연락처는 **hello@mow.codes**다. 소개에는 “DS가 처음 만들고, DS와 basoon이 함께 개발합니다.”라고 표기했다. 등록정보에 승인된 빨간 티라노 아이콘, 한국어 스크린샷 한 장, 소형 홍보 이미지가 저장된 것을 확인했다. GitHub 저장소의 링크 미리보기에도 같은 디자인을 적용했다.
 
 ## 소개 문구 초안
 
@@ -33,9 +35,9 @@ Tab Zoo는 열린 웹사이트를 작은 동물로 보여주는 브라우저 확
 
 **목적 설명 초안:** 브라우저에서 열린 웹사이트를 동물로 표현하고, 떠난 동물과 `Agent Tabs` 그룹의 방문을 로컬 컬렉션으로 보여줍니다.
 
-**개인정보처리방침 후보 URL:** https://github.com/dongseok2001-creator/tab-zoo/blob/main/extension/PRIVACY.md — 공개 접근과 각 스토어의 URL 요건을 제출 직전에 확인한다. 도메인·방문 시각·횟수 등이 로컬에 저장되므로 스토어의 데이터 사용 항목도 실제 동작에 맞춰 기입한다. 외부 전송 여부와 원격 코드 사용은 최종 패키지 기준으로 다시 검증한다.
+Chrome 등록정보에는 [개인정보처리방침](https://github.com/MOW-Basoon/tab-zoo/blob/main/extension/PRIVACY.md)과 위 권한의 사용 목적을 등록했다. 권한이나 데이터 처리가 바뀌면 다음 버전 제출 전에 등록정보도 갱신한다.
 
-## 제출 전에 남은 일
+## 제출 자료와 검증
 
 **준비한 자료**
 
@@ -47,10 +49,16 @@ No account is needed. In a fresh test profile, open example.org, then open Tab Z
 
 To check the optional tab-group feature in Chrome or Edge, name a tab group exactly `Agent Tabs` and navigate a grouped tab to example.net. After closing the tab, open the collection and look for example.net with an Agent Tabs count. This tests recognition of a group name. An ordinary visit outside that group should not increase that count. The feature does not require an AI account.
 
-1. `npm test`, `npm run package:extension`을 최종 커밋에서 실행하고 ZIP의 루트에 `manifest.json`과 필요한 파일이 있는지 확인한다. Chrome과 Edge의 실제 설치·업데이트·삭제, 일반 탭과 Agent Tabs, 화석 삭제를 각각 확인한다.
-2. Chrome 웹스토어 개발자 계정과 Microsoft Partner Center의 Edge 개발자 계정의 소유자·접근 권한·연락처를 확인한다. Chrome 개발자 등록에는 일회성 등록비가 필요하다. 계정 가입, 결제, 제출 또는 공개 여부가 이미 승인됐다고 가정하지 않는다.
-3. 실제 실행 화면으로 스토어 스크린샷을 준비한다. Chrome은 1280×800 또는 640×400, Edge는 1280×800 또는 640×480을 허용하므로 1280×800은 공통 후보다. Chrome용 440×280 소형 홍보 이미지도 준비한다. 스토어의 최신 규격과 이미지 승인 상태는 제출 직전 확인한다.
-4. 배포 국가, 언어, 스토어 표시 이름, 지원 연락처와 설명문을 소유자와 정한다. 스토어별 개인정보·권한 항목을 완성하고 제출 후 심사 및 공개 상태를 확인한다.
-5. Aside의 현재 AI 그룹 식별은 `Agent Tabs` 이름에 의존한다. 일반 그룹과 구별하는 데 한계가 있으므로 스토어에 모든 AI 방문을 추적하거나 위험 사이트를 탐지한다고 기재하지 않는다.
+- **Aside 실제 사용 확인** — 설치돼 있던 개발자용 확장을 0.1.13에서 0.1.15로 갱신한 뒤 기존 화석이 유지됐다. Aside 에이전트가 example.net 탭을 열고 닫자 컬렉션에 `Agent Tabs 1회`로 나타났다.
+- **Chrome for Testing 확인** — 별도 프로필에 0.1.14를 설치하고 같은 경로에서 0.1.15로 갱신했다. 확장 ID와 기존 화석이 유지됐고 일반 탭, 그룹 방문, 개별 화석 삭제를 확인했다.
+- **공개 후 확인할 일** — 일반 Chrome에서 스토어 링크로 신규 설치를 확인하고, 다음 버전이 공개되면 기존 스토어 설치본의 자동 업데이트와 화석 보존을 확인한다. Edge는 제출을 재개할 때 설치·업데이트·삭제부터 검증한다.
+
+## 다음 Chrome 버전 준비
+
+1. `extension/manifest.json`의 버전을 올리고 변경을 검증해 main에 병합한다.
+2. GitHub의 **Actions → Chrome Web Store package → Run workflow**에서 main을 선택한다. 작업 종류를 `submit`으로 지정하면 GitHub가 테스트와 패키징을 실행하고 같은 Tab Zoo 항목에 새 버전을 올려 심사에 제출한다. ZIP을 PC로 내려받을 필요가 없다. `package`는 패키지만 만들고 `status`는 현재 스토어 상태를 읽는다. GitHub에 보관되는 ZIP은 3일 뒤 만료된다.
+3. 실행 로그에서 Google의 접수 결과를 확인한다. 공식 스토어로 설치한 사용자는 승인·게시 후 Chrome의 업데이트 주기에 따라 새 버전을 받는다. [Chrome 업데이트 안내](https://developer.chrome.com/docs/extensions/develop/concepts/extensions-update-lifecycle)
+
+자동화 인증은 Google Cloud의 단기 토큰을 쓴다. Google은 저장소·소유 조직의 숫자 ID, main 브랜치, 실행 방식과 워크플로 파일을 확인한다. Google의 서비스 계정 연결 권한은 MOW 게시자 전체에 적용되며 이 워크플로에서 사용하는 항목 ID는 Tab Zoo로 고정했다. [Chrome Web Store API](https://developer.chrome.com/docs/webstore/using-api)
 
 참고: [Chrome 게시](https://developer.chrome.com/docs/webstore/publish), [Chrome 이미지](https://developer.chrome.com/docs/webstore/images), [Chrome 개발자 등록](https://developer.chrome.com/docs/webstore/register), [Chrome 개인정보 항목](https://developer.chrome.com/docs/webstore/cws-dashboard-privacy), [Edge 게시](https://learn.microsoft.com/en-us/microsoft-edge/extensions/publish/publish-extension).

@@ -34,7 +34,7 @@ Tab Zoo(이하 "확장 프로그램")는 열린 탭의 사용 습관을 작은 �
 
 ## 문의
 
-이 방침에 대한 문의: https://github.com/dongseok2001-creator/tab-zoo/issues
+이 방침에 대한 문의: https://github.com/MOW-Basoon/tab-zoo/issues
 
 ---
 
@@ -74,4 +74,4 @@ The browser's idle state (no input or screen locked) is used only to exclude tim
 
 ## Contact
 
-Questions about this policy: https://github.com/dongseok2001-creator/tab-zoo/issues
+Questions about this policy: https://github.com/MOW-Basoon/tab-zoo/issues

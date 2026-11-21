@@ -89,4 +89,4 @@ npm run package:extension   # 웹스토어용 zip을 outputs/에 생성 (Windows
 
 0.1.15부터 Tab Zoo 자체 코드와 자체 제작 자산은 [PolyForm Perimeter 1.0.1](LICENSE) 조건으로 소스를 공개합니다. 누구나 코드를 살펴보거나 개인·업무용으로 확장을 쓸 수 있습니다. 이 코드를 이용해 다른 사람에게 Tab Zoo와 경쟁하는 제품을 제공하는 용도는 무료 제품을 포함해 제한됩니다.
 
-[0.1.14까지 MIT로 공개한 버전](https://github.com/dongseok2001-creator/tab-zoo/tree/3c8c8e8160fa26014b189107b1f269247b6a3ed2)에는 당시 부여한 [MIT 이용 조건](licenses/MIT-through-0.1.14.txt)이 계속 적용됩니다. 번들에 포함된 tldts는 MIT, Public Suffix List 데이터는 MPL 2.0을 따릅니다. [외부 구성요소 고지](extension/vendor/README.txt)
+[0.1.14까지 MIT로 공개한 버전](https://github.com/MOW-Basoon/tab-zoo/tree/3c8c8e8160fa26014b189107b1f269247b6a3ed2)에는 당시 부여한 [MIT 이용 조건](licenses/MIT-through-0.1.14.txt)이 계속 적용됩니다. 번들에 포함된 tldts는 MIT, Public Suffix List 데이터는 MPL 2.0을 따릅니다. [외부 구성요소 고지](extension/vendor/README.txt)
