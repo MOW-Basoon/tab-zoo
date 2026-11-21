@@ -226,3 +226,25 @@ The earlier log gave DS default decision credit for unattributed choices. This c
 - Basis: basoon wanted publicly inspectable source and protection against monetized clones. basoon's Codex proposed Perimeter. basoon instructed adoption and reported DS's prior agreement.
 
 Keep the repository public. From 0.1.15 use [PolyForm Perimeter 1.0.1](../LICENSE) for the project's own work. The grant permits ordinary use, including at work, and restricts providing competing products to others, including free competitors. Copies already made available under MIT through 0.1.14 retain those permissions. Preserve the [historical MIT notice](../licenses/MIT-through-0.1.14.txt) and the bundled dependencies' own notices in the store package.
+
+## 2026-11-22 — Chrome 첫 제출과 원작자 표기
+
+- Status: submitted for review.
+- Proposed by: basoon (Codex)
+- Decided by: basoon (human)
+- Approved by: basoon (human)
+- Implemented by: basoon (Codex)
+- Basis: basoon requested distribution and approved the proposed publisher, verified public contact and creator credit. basoon selected the non-trader declaration for the current publisher. The submission receipt and runtime checks are recorded in [스토어 배포](store-submission.md).
+
+Chrome에 먼저 제출한다. 게시자 MOW, 공개 연락처 hello@mow.codes, 소개에는 원작자 DS와 공동 개발자 DS·basoon을 표기한다. 기존에 basoon이 승인한 티라노 아이콘을 사용한다. DS 본인의 핵심 아이디어와 DS의 Claude가 맡은 초기 구현은 이 기록 첫 항목에 있다. basoon의 Codex가 배포 설정에서 무료·공개·전체 지역과 심사 통과 후 자동 게시를 적용했다.
+
+## 2026-11-22 — GitHub에서 배포용 ZIP 생성
+
+- Status: implemented.
+- Proposed by: basoon (Codex)
+- Decided by: basoon (Codex)
+- Approved by: unknown
+- Implemented by: basoon (Codex)
+- Basis: basoon asked to reduce repeated uploads and local temporary files. basoon's Codex selected an on-demand hosted build and three-day artifact retention as implementation details.
+
+배포할 때만 GitHub에서 테스트하고 기존 허용 목록으로 ZIP을 만든다. 패키지에는 현행 및 이전 라이선스 고지와 외부 구성요소 고지를 포함한다.
