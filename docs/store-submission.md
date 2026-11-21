@@ -56,7 +56,9 @@ To check the optional tab-group feature in Chrome or Edge, name a tab group exac
 ## 다음 Chrome 버전 준비
 
 1. `extension/manifest.json`의 버전을 올리고 변경을 검증해 main에 병합한다.
-2. GitHub의 **Actions → Chrome Web Store package → Run workflow**에서 main을 선택한다. GitHub가 테스트와 패키징을 실행한다. 결과 ZIP은 3일 뒤 만료된다.
-3. 같은 Tab Zoo 항목에서 새 패키지를 올리고 심사에 제출한다. 공식 스토어로 설치한 사용자는 승인·게시 후 Chrome의 업데이트 주기에 따라 새 버전을 받는다. [Chrome 업데이트 안내](https://developer.chrome.com/docs/extensions/develop/concepts/extensions-update-lifecycle)
+2. GitHub의 **Actions → Chrome Web Store package → Run workflow**에서 main을 선택한다. 작업 종류를 `submit`으로 지정하면 GitHub가 테스트와 패키징을 실행하고 같은 Tab Zoo 항목에 새 버전을 올려 심사에 제출한다. ZIP을 PC로 내려받을 필요가 없다. `package`는 패키지만 만들고 `status`는 현재 스토어 상태를 읽는다. GitHub에 보관되는 ZIP은 3일 뒤 만료된다.
+3. 실행 로그에서 Google의 접수 결과를 확인한다. 공식 스토어로 설치한 사용자는 승인·게시 후 Chrome의 업데이트 주기에 따라 새 버전을 받는다. [Chrome 업데이트 안내](https://developer.chrome.com/docs/extensions/develop/concepts/extensions-update-lifecycle)
+
+자동화 인증은 Google Cloud의 단기 토큰을 쓴다. Google은 저장소·소유 조직의 숫자 ID, main 브랜치, 실행 방식과 워크플로 파일을 확인한다. Google의 서비스 계정 연결 권한은 MOW 게시자 전체에 적용되며 이 워크플로에서 사용하는 항목 ID는 Tab Zoo로 고정했다. [Chrome Web Store API](https://developer.chrome.com/docs/webstore/using-api)
 
 참고: [Chrome 게시](https://developer.chrome.com/docs/webstore/publish), [Chrome 이미지](https://developer.chrome.com/docs/webstore/images), [Chrome 개발자 등록](https://developer.chrome.com/docs/webstore/register), [Chrome 개인정보 항목](https://developer.chrome.com/docs/webstore/cws-dashboard-privacy), [Edge 게시](https://learn.microsoft.com/en-us/microsoft-edge/extensions/publish/publish-extension).

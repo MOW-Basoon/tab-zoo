@@ -248,3 +248,14 @@ Chrome에 먼저 제출한다. 게시자 MOW, 공개 연락처 hello@mow.codes, 
 - Basis: basoon asked to reduce repeated uploads and local temporary files. basoon's Codex selected an on-demand hosted build and three-day artifact retention as implementation details.
 
 배포할 때만 GitHub에서 테스트하고 기존 허용 목록으로 ZIP을 만든다. 패키지에는 현행 및 이전 라이선스 고지와 외부 구성요소 고지를 포함한다.
+
+## 2026-11-22 — GitHub에서 Chrome 업데이트 제출
+
+- Status: adopted.
+- Proposed by: basoon (Codex)
+- Decided by: basoon (human)
+- Approved by: basoon (human)
+- Implemented by: basoon (Codex)
+- Basis: basoon approved connecting a service account with MOW publisher access after reviewing its scope and the restriction to Tab Zoo releases from main.
+
+다음 버전부터 관리자가 GitHub 작업을 직접 실행해 Chrome 심사에 제출할 수 있도록 한다. 별도의 Tab Zoo 배포 프로젝트와 단기 인증을 사용한다. 스토어 초도 심사 중에는 읽기 전용 상태 조회로 연결을 검증한다.
