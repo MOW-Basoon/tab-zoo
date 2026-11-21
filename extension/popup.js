@@ -472,7 +472,7 @@ function bindCreaturePlay(button, animal, openTab) {
     const hit = button.getBoundingClientRect();
     const map = elements.creatures.getBoundingClientRect();
     grip = { id: event.pointerId, x: event.clientX, y: event.clientY, lastX: event.clientX, lastY: event.clientY,
-      dx: 0, dy: 0, turns: 0, lastMove: event.timeStamp, lifted: false,
+      dx: 0, dy: 0, offsetX: 0, offsetY: 0, turns: 0, lastMove: event.timeStamp, lifted: false,
       minX: map.left - hit.left, maxX: map.right - hit.right, minY: map.top - hit.top, maxY: map.bottom - hit.bottom };
     button.setPointerCapture(event.pointerId);
     holdTimer = setTimeout(lift, 220);
@@ -485,7 +485,9 @@ function bindCreaturePlay(button, animal, openTab) {
       clearTimeout(holdTimer);
       lift();
     }
-    animal.style.translate = `${clamp(x, grip.minX, grip.maxX)}px ${clamp(y, grip.minY, grip.maxY)}px`;
+    grip.offsetX = clamp(x, grip.minX, grip.maxX);
+    grip.offsetY = clamp(y, grip.minY, grip.maxY);
+    animal.style.translate = `${grip.offsetX}px ${grip.offsetY}px`;
     const dx = event.clientX - grip.lastX, dy = event.clientY - grip.lastY;
     if (Math.hypot(dx, dy) < 10) return;
     if (event.timeStamp - grip.lastMove > 350) grip.turns = 0;
@@ -495,9 +497,22 @@ function bindCreaturePlay(button, animal, openTab) {
   });
   function release(event) {
     if (!grip || event.pointerId !== grip.id) return;
+    const released = grip;
     grip = null;
     clearTimeout(holdTimer);
     animal.classList.remove("held");
+    if (released.lifted) {
+      animal.dispatchEvent(new CustomEvent("creature-drop", { bubbles: true, detail: { x: released.offsetX, y: released.offsetY } }));
+      // Eggs and sleeping animals do not participate in the walking controller.
+      if (animal.matches(".egg, .asleep")) {
+        animal.style.left = `${animal.offsetLeft + released.offsetX}px`;
+        animal.style.top = `${animal.offsetTop + released.offsetY}px`;
+      }
+      animal.classList.remove("landing");
+      void animal.offsetWidth;
+      animal.classList.add("landing");
+      animal.addEventListener("animationend", () => animal.classList.remove("landing"), { once: true });
+    }
     animal.style.translate = "";
     if (animal.classList.contains("dizzy")) recovery = setTimeout(() => animal.classList.remove("dizzy"), 1500);
   }

@@ -70,6 +70,18 @@ function startZooMotion(container) {
       states.set(el,state);
     }
   }
+  container.addEventListener('creature-drop', event => {
+    const state=states.get(event.target);
+    if(!state) return;
+    state.x+=event.detail.x;
+    state.y+=event.detail.y;
+    clampToBounds(state);
+    state.el.style.left=`${state.x}px`;
+    state.el.style.top=`${state.y}px`;
+    state.remaining=0;
+    state.wait=900;
+    schedulePersist();
+  });
   const observer=new MutationObserver(sync);
   observer.observe(container,{childList:true});
   sync();
