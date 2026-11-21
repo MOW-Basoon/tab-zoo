@@ -270,3 +270,25 @@ Chrome에 먼저 제출한다. 게시자 MOW, 공개 연락처 hello@mow.codes, 
 - Basis: basoon explicitly requested automatic review submission when a higher extension version is merged into main, while keeping everyday development pushes separate from releases.
 
 버전을 올린 PR을 main에 병합하는 것이 출시 결정이다. GitHub에서 변경 전후 매니페스트를 비교하고 해당 병합을 확인한 후 테스트부터 Chrome 심사 제출까지 수행한다. 이전 수동 제출 절차를 대체한다. Google의 심사 및 승인 후 공개 절차는 그대로 따른다.
+
+## 2026-11-22 — 동물 도감과 잡기·흔들기, HTTP 괴물
+
+- Status: adopted.
+- Proposed by: basoon (human)
+- Decided by: basoon (human)
+- Approved by: basoon (human)
+- Implemented by: basoon (Codex)
+- Basis: basoon requested a species collection, animals struggling when picked up and getting dizzy when shaken, and a monster for HTTP pages. The HTTP cue refines basoon's earlier idea of making browsing risks visible. DS created the original tab zoo and its seven animals were present before this feature.
+
+동물 종을 모으는 기능을 사이트별 화석 컬렉션과 함께 제공한다. 지도에서 동물을 들고 놀 수 있고, 암호화되지 않은 HTTP 연결을 괴물로 표시한다.
+
+## 2026-11-22 — 도감의 저장 범위와 제스처·HTTP 표시 기준
+
+- Status: implemented.
+- Proposed by: basoon (Codex)
+- Decided by: basoon (Codex)
+- Approved by: unknown
+- Implemented by: basoon (Codex)
+- Basis: basoon requested the three features. basoon's Codex selected the following implementation details without a separate human design review.
+
+도감에는 발견한 종 ID만 저장한다. 기존 배정과 화석에서 발견 종을 복원하고, 화석을 삭제해도 발견 종은 보존한다. 클릭은 탭 열기, 길게 누르거나 끌기는 들어 올리기, 빠른 방향 반전 세 번은 어지럼 반응으로 구분한다. 시스템의 모션 감소 설정을 따른다. 같은 사이트의 표시 대상 탭 중 하나라도 HTTP면 괴물 한 마리가 그 HTTP 탭을 가리킨다. 괴물은 기존 종의 임시 모습이며 악성 사이트 판정이나 도감 수집 대상이 아니다.

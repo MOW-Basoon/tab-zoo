@@ -136,6 +136,16 @@ const sleepingArt={
   duck:{outline:'M11 14H18V15H20V18H21V23H25V22H29V24H33V23H35V26H33V29H30V31H15V32H11V30H9V27H10V23H6V22H5V20H9V17H10V15H11Z',patches:['M21 25H29V27H27V29H22V28H20V26H21Z'],pale:'M11 25H14V29H12Z',bill:'M6 20H12V22H7Z',eye:[12,18]},
   elephant:{outline:'M9 16H18V18H28V20H31V29H29V32H16V31H12V28H10V30H5V28H6V24H7V19H9Z',patches:['M16 19H21V25H19V28H15V26H15V21H16Z M24 27H29V30H23Z'],pale:'M12 29H18V31H12Z',eye:[10,21]}
 };
+function httpMonsterSprite() {
+  return `<svg viewBox="0 0 40 36" shape-rendering="crispEdges" aria-label="HTTP 괴물" role="img">
+    <path fill="#24182f" d="M3 3h4v5h5V5h3v5h10V5h3v3h5V3h4v12h-4v4h4v10h-4v4h-6v-3H13v3H7v-4H3V19h4v-4H3z"/>
+    <path fill="#aa60af" d="M6 7h2v5h6v2h12v-2h6V7h2v7h-5v5h4v9h-5v-3H12v3H7v-9h4v-5H6z"/>
+    <path fill="#332139" d="M10 18h7v5h-7zm13 0h7v5h-7zm-8 7h10v3H15z"/>
+    <path fill="#ffdb75" d="M12 19h3v3h-3zm13 0h3v3h-3z"/>
+    <path fill="#fff2d7" d="M16 25h2v3h-2zm6 0h2v3h-2z"/>
+  </svg>`;
+}
+
 function finishedSprite(a, palette, phase='adult', asleep=false){
   const base=palette?.color||a.color;
   palette=brightSpritePalette(a.id==='triceratops'?triceratopsBaseColor(base):base);

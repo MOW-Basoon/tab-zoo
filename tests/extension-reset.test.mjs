@@ -86,16 +86,17 @@ test("repeated resets clear the current species map and tracking records", async
   const deleted = await new Promise(resolve => runtimeMessage.listener({ type: "deleteFossil", id: "one" }, { id: "extension-id" }, resolve));
   assert.equal(deleted.ok, true);
   assert.equal(data.tabZooStateV1.fossils.length, 0);
+  assert.deepEqual([...data.tabZooStateV1.discoveredSpecies], ["cat"], "deleting a legacy fossil retains only the species in the guide");
 });
 
 test("a new assignment selects from the complete species list", async () => {
   const source = await readFile(new URL("background.js", extensionRoot), "utf8");
-  const functionSource = source.match(/function assignSpecies\([\s\S]*?\n}/)?.[0];
+  const functionSource = source.slice(source.indexOf("function assignSpecies("), source.indexOf("async function writeState("));
   assert.ok(functionSource, "assignSpecies function should be present");
 
   const species = ["sauropod", "trex", "triceratops", "cat", "fox", "duck", "elephant"];
   for (const [index, expected] of species.entries()) {
-    const state = { speciesMap: {} };
+    const state = { speciesMap: {}, discoveredSpecies: [] };
     const math = Object.create(Math);
     math.random = () => (index + 0.5) / species.length;
     const assigned = vm.runInNewContext(
@@ -104,5 +105,6 @@ test("a new assignment selects from the complete species list", async () => {
     );
     assert.equal(assigned, expected);
     assert.equal(state.speciesMap["example.com"], assigned);
+    assert.deepEqual(state.discoveredSpecies, [expected]);
   }
 });

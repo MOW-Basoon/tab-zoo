@@ -56,6 +56,10 @@ async function readState() {
   }
   state.speciesGeneration ??= 0;
   state.speciesMap = Object.assign(Object.create(null), state.speciesMap ?? {});
+  if (!Array.isArray(state.discoveredSpecies)) {
+    const previous = [...Object.values(state.speciesMap), ...state.fossils.map(fossil => fossil.species)];
+    state.discoveredSpecies = species.filter(id => previous.includes(id) || (id === "duck" && previous.includes("owl")));
+  }
   delete state.resetTabAccess;
   delete state.suppressedTabs;
   state.session ??= null;
@@ -103,10 +107,14 @@ function migrateDomains(state) {
 function assignSpecies(state, domain) {
   if (!Object.hasOwn(state.speciesMap, domain)) state.speciesMap[domain] = null;
   if (state.speciesMap[domain] === "owl") state.speciesMap[domain] = "duck";
-  if (species.includes(state.speciesMap[domain])) return state.speciesMap[domain];
-  const assigned = species[Math.floor(Math.random() * species.length)];
-  state.speciesMap[domain] = assigned;
+  if (!species.includes(state.speciesMap[domain])) state.speciesMap[domain] = species[Math.floor(Math.random() * species.length)];
+  const assigned = state.speciesMap[domain];
+  rememberSpecies(state, assigned);
   return assigned;
+}
+
+function rememberSpecies(state, id) {
+  if (!state.discoveredSpecies.includes(id)) state.discoveredSpecies.push(id);
 }
 
 async function writeState(state) {
@@ -132,6 +140,7 @@ async function recordAgentTab(tab, url = tab?.url) {
     fossil = { id: crypto.randomUUID(), domain, species: species[Math.floor(Math.random() * species.length)], totalMs: 0, departedAt: now, source: "agent-group", visits: 1 };
     state.fossils.push(fossil);
   }
+  rememberSpecies(state, fossil.species);
   await writeState(state);
 }
 
@@ -303,6 +312,7 @@ async function resetTracking() {
   const state = {
     domainGroupingVersion: 1,
     fossils: previousState.fossils,
+    discoveredSpecies: previousState.discoveredSpecies,
     agentSeenTabs: {},
     records: {},
     seenTabs: {},

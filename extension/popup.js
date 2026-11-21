@@ -322,12 +322,14 @@ function visualFromMetrics(metrics) {
 }
 
 function displayName(model) {
+  if (model.httpTab) return `${model.siteName} HTTP 괴물`;
   if (model.visual.phase === "egg") return `${model.siteName} 알`;
   if (model.visual.phase === "juvenile") return `${model.siteName} 유년체`;
   return `${model.siteName} ${speciesNames[model.species]}`;
 }
 
 function summaryFor(model) {
+  if (model.httpTab) return "이 사이트에 암호화되지 않은 HTTP 탭이 열려 있어요. 괴물을 클릭하면 그 탭으로 이동해요.";
   if (model.visual.phase === "egg") {
     return "아직 알 속에 있어 움직이지 않습니다. 관심을 먹으면 유년체로 깨어납니다.";
   }
@@ -391,8 +393,9 @@ function updateObserver(model) {
 }
 
 async function focusTab(model) {
-  await chrome.tabs.update(model.tab.id, { active: true });
-  await chrome.windows.update(model.tab.windowId, { focused: true });
+  const tab = model.httpTab ?? model.tab;
+  await chrome.tabs.update(tab.id, { active: true });
+  await chrome.windows.update(tab.windowId, { focused: true });
   window.close();
 }
 
@@ -428,23 +431,81 @@ function renderCreature(model, index) {
   button.type = "button";
   button.className = "creature-button";
   button.setAttribute("aria-label", `${displayName(model)}, ${model.domain} 탭 열기`);
-  const isEgg = model.visual.phase === "egg";
+  const isEgg = !model.httpTab && model.visual.phase === "egg";
   const art = spriteArt.find(animal => animal.id === model.species) || spriteArt[0];
-  const artwork = isEgg ? spriteParts : finishedSprite(art, {
+  const artwork = model.httpTab ? httpMonsterSprite() : isEgg ? spriteParts : finishedSprite(art, {
     color: model.accent,
     shade: model.shade,
     light: model.mark,
     ink: shiftColor(model.accent, -145),
   }, model.visual.phase, model.visual.asleep);
   const spriteContent = isEgg ? artwork : `<span class="sprite-facing">${artwork}</span><i class="sleep-puff" aria-hidden="true">Z</i>`;
+  if (model.httpTab) {
+    article.className = "creature http-monster" + (model.tab.active ? " active" : "");
+    button.title = "암호화되지 않은 HTTP 탭";
+  }
   button.innerHTML = `
-    <span class="sprite-stage"><span class="sprite-scale ${isEgg ? "egg-scale" : ""}"><span class="pixel-sprite ${isEgg ? "" : "finished-sprite"} phase-${model.visual.phase} ${drowsyClass} ${model.visual.asleep ? "sleeping" : ""}" data-species="${model.species}">${spriteContent}</span></span></span>
+    <span class="sprite-stage"><span class="sprite-scale ${isEgg ? "egg-scale" : ""}"><span class="pixel-sprite ${isEgg ? "" : "finished-sprite"} phase-${model.httpTab ? "adult" : model.visual.phase} ${drowsyClass} ${!model.httpTab && model.visual.asleep ? "sleeping" : ""}" data-species="${model.species}">${spriteContent}</span></span></span>
     <span class="creature-name">${escapeHtml(displayName(model))}</span>`;
   button.addEventListener("mouseenter", () => updateObserver(model));
   button.addEventListener("focus", () => updateObserver(model));
-  button.addEventListener("click", () => focusTab(model));
+  bindCreaturePlay(button, article, () => focusTab(model));
   article.append(button);
   elements.creatures.append(article);
+}
+
+function bindCreaturePlay(button, animal, openTab) {
+  let grip;
+  let holdTimer;
+  let recovery;
+  let suppressClick = false;
+  function lift() {
+    grip.lifted = true;
+    animal.classList.add("held");
+    suppressClick = true;
+  }
+  button.addEventListener("pointerdown", event => {
+    if (event.button !== 0 || !event.isPrimary || grip) return;
+    clearTimeout(recovery);
+    animal.classList.remove("dizzy");
+    suppressClick = false;
+    const hit = button.getBoundingClientRect();
+    const map = elements.creatures.getBoundingClientRect();
+    grip = { id: event.pointerId, x: event.clientX, y: event.clientY, lastX: event.clientX, lastY: event.clientY,
+      dx: 0, dy: 0, turns: 0, lastMove: event.timeStamp, lifted: false,
+      minX: map.left - hit.left, maxX: map.right - hit.right, minY: map.top - hit.top, maxY: map.bottom - hit.bottom };
+    button.setPointerCapture(event.pointerId);
+    holdTimer = setTimeout(lift, 220);
+  });
+  button.addEventListener("pointermove", event => {
+    if (!grip || event.pointerId !== grip.id) return;
+    const x = event.clientX - grip.x, y = event.clientY - grip.y;
+    if (!grip.lifted) {
+      if (Math.hypot(x, y) < 6) return;
+      clearTimeout(holdTimer);
+      lift();
+    }
+    animal.style.translate = `${clamp(x, grip.minX, grip.maxX)}px ${clamp(y, grip.minY, grip.maxY)}px`;
+    const dx = event.clientX - grip.lastX, dy = event.clientY - grip.lastY;
+    if (Math.hypot(dx, dy) < 10) return;
+    if (event.timeStamp - grip.lastMove > 350) grip.turns = 0;
+    else if (dx * grip.dx + dy * grip.dy < 0) grip.turns++;
+    Object.assign(grip, { lastX: event.clientX, lastY: event.clientY, dx, dy, lastMove: event.timeStamp });
+    if (grip.turns >= 3) animal.classList.add("dizzy");
+  });
+  function release(event) {
+    if (!grip || event.pointerId !== grip.id) return;
+    grip = null;
+    clearTimeout(holdTimer);
+    animal.classList.remove("held");
+    animal.style.translate = "";
+    if (animal.classList.contains("dizzy")) recovery = setTimeout(() => animal.classList.remove("dizzy"), 1500);
+  }
+  for (const type of ["pointerup", "pointercancel", "lostpointercapture"]) button.addEventListener(type, release);
+  button.addEventListener("click", event => {
+    if (!suppressClick || event.detail === 0) openTab();
+    suppressClick = false;
+  });
 }
 
 function escapeHtml(value) {
@@ -492,6 +553,11 @@ async function init() {
     || (b.index ?? 0) - (a.index ?? 0)
   );
   const byDomain = new Map();
+  const httpTabs = new Map();
+  for (const tab of prioritizedTabs) {
+    const domain = domainFromUrl(tab.url);
+    if (tab.url.startsWith("http:") && !httpTabs.has(domain)) httpTabs.set(domain, tab);
+  }
   for (const tab of prioritizedTabs) {
     const domain = domainFromUrl(tab.url);
     if (!byDomain.has(domain) || tab.active) byDomain.set(domain, tab);
@@ -528,6 +594,7 @@ async function init() {
     models.push({
       domain,
       tab,
+      httpTab: httpTabs.get(domain),
       favicon: faviconForTab(tab),
       siteName: rootName(domain, tab.url),
       species: assignedSpecies,
@@ -552,7 +619,7 @@ async function init() {
 
 function applyEggVisibility() {
   const visibleModels = eggsHidden
-    ? renderedModels.filter((model) => model.visual.phase !== "egg")
+    ? renderedModels.filter((model) => model.httpTab || model.visual.phase !== "egg")
     : renderedModels;
   elements.creatures.querySelectorAll(".creature.egg").forEach((creature) => {
     creature.hidden = eggsHidden;
@@ -618,6 +685,34 @@ async function showCollection() {
 
 elements.openCollection.addEventListener("click", () => showCollection().catch(console.error));
 elements.closeCollection.addEventListener("click", () => { elements.collection.hidden = true; });
+
+const guide = document.querySelector("#species-guide");
+const openGuide = document.querySelector("#open-guide");
+const closeGuide = document.querySelector("#close-guide");
+openGuide.addEventListener("click", async () => {
+  const { state } = await getSnapshot();
+  const legacy = () => [...Object.values(state.speciesMap ?? {}), ...(state.fossils ?? []).map(fossil => fossil.species)];
+  const found = new Set((state.discoveredSpecies ?? legacy()).map(id => id === "owl" ? "duck" : id));
+  const list = document.querySelector("#guide-list");
+  list.replaceChildren();
+  for (const art of spriteArt) {
+    const entry = document.createElement("li");
+    if (found.has(art.id)) entry.innerHTML = finishedSprite(art);
+    else {
+      const unknown = document.createElement("span");
+      unknown.textContent = "?";
+      unknown.setAttribute("aria-hidden", "true");
+      entry.append(unknown);
+    }
+    const label = document.createElement("b");
+    label.textContent = found.has(art.id) ? speciesNames[art.id] : "미발견";
+    entry.append(label);
+    list.append(entry);
+  }
+  document.querySelector("#guide-count").textContent = `발견한 동물 ${species.filter(id => found.has(id)).length} / ${species.length}종`;
+  if (!guide.open) guide.showModal();
+});
+closeGuide.addEventListener("click", () => guide.close());
 
 function showClearedZoo() {
   renderedModels = [];

@@ -39,6 +39,7 @@ test("background Agent Tabs visits survive rapid closure without storing a full 
   assert.equal(fossils[0].domain, "uos.ac.kr");
   assert.equal(fossils[0].source, "agent-group");
   assert.equal(fossils[0].visits, 1);
+  assert.deepEqual(data.tabZooStateV1.discoveredSpecies, [fossils[0].species]);
   assert.doesNotMatch(JSON.stringify(data), /token=secret|\/private/);
 });
 

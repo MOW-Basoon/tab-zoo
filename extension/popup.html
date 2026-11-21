@@ -17,7 +17,7 @@
       </header>
 
       <section class="map-frame" aria-label="열린 탭 생물 지도">
-        <div class="map-label">CURRENT WINDOW · HOVER TO INSPECT · CLICK TO OPEN</div>
+        <div class="map-label">클릭하면 탭 열기 · 꾹 눌러 들고 흔들기</div>
         <div class="zoo-map" id="zoo-map">
           <button id="toggle-eggs" class="egg-toggle" type="button" aria-pressed="false">알 숨기기</button>
           <label class="map-theme-control">
@@ -64,7 +64,12 @@
         </div>
       </section>
 
-      <footer><button id="open-collection" type="button">화석 컬렉션</button><b id="app-version">POPUP</b></footer>
+      <footer><nav aria-label="수집 기록"><button id="open-collection" type="button">화석 컬렉션</button><button id="open-guide" type="button">동물 도감</button></nav><b id="app-version">POPUP</b></footer>
+      <dialog id="species-guide" class="fossil-collection" aria-label="동물 도감">
+        <header><b>동물 도감</b><button id="close-guide" type="button" aria-label="도감 닫기">×</button></header>
+        <p id="guide-count"></p>
+        <ul id="guide-list"></ul>
+      </dialog>
       <section id="fossil-collection" class="fossil-collection" aria-label="화석 컬렉션" hidden>
         <header><b>화석 컬렉션</b><button id="close-collection" type="button" aria-label="컬렉션 닫기">×</button></header>
         <p>떠난 동물이 이 브라우저에 남아요.</p>
