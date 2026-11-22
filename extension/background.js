@@ -388,16 +388,18 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (tab.groupId >= 0 && (changeInfo.url || Object.hasOwn(changeInfo, "groupId") || changeInfo.status === "loading")) {
     enqueue(async () => { await agentGroupsReady; await recordAgentTab(tab, changeInfo.url || tab.url); });
   }
-  if (!tab.active) return;
   if (changeInfo.url || changeInfo.status === "loading") {
     enqueue(async () => {
-      const window = await chrome.windows.get(tab.windowId);
-      if (!window.focused) return;
-      await beginTab(tab, Date.now());
+      if (tab.active) {
+        // The window may have closed before this queued event is processed.
+        const window = await chrome.windows.get(tab.windowId).catch(() => null);
+        if (window.focused) await beginTab(tab, Date.now());
+      }
       await forgetClosedDomains();
     });
     return;
   }
+  if (!tab.active) return;
   if (Object.hasOwn(changeInfo, "audible")) {
     enqueue(async () => {
       const window = await chrome.windows.get(tab.windowId);

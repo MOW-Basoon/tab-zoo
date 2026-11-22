@@ -109,6 +109,18 @@ test("navigating away from the final tab archives the departed animal", async ()
   assert.ok(data.tabZooStateV1.records["new.example"]);
 });
 
+test("background navigation archives the old site without tracking the new one as focused", async () => {
+  const tab = { id: 1, windowId: 1, active: false, url: "https://new.example/" };
+  const other = { id: 2, windowId: 1, active: true, url: "https://b.com/" };
+  const { chrome, data, drain } = await loadBackground({ openTabs: [tab, other], state: baseState() });
+  chrome.tabs.onUpdated.listener(1, { url: tab.url }, tab);
+  await drain();
+  assert.equal(data.tabZooStateV1.fossils.filter(f => f.domain === "a.com").length, 1);
+  assert.equal(data.tabZooStateV1.records["a.com"], undefined);
+  assert.ok(data.tabZooStateV1.records["b.com"]);
+  assert.equal(data.tabZooStateV1.records["new.example"], undefined);
+});
+
 function baseState() {
   return {
     records: { "a.com": record(60000), "b.com": record(120000) },
